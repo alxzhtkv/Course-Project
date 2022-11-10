@@ -1,7 +1,24 @@
+//import org.jdatepicker.impl;
+
+import org.jdatepicker.impl.JDatePickerImpl;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Calendar;
+
+import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import org.jdatepicker.*;
+import org.jdatepicker.impl.*;
+import org.jdatepicker.util.*;
 
 import java.util.concurrent.ThreadLocalRandom;
 import javax.imageio.ImageIO;
@@ -41,6 +58,7 @@ public class StartWindow extends JFrame {
 
 
         b1.addActionListener(new ButtonRegistrationListener());
+//        b2.addActionListener(new ButtonAuthorizationListener());
 
         add(l1);
         add(b1);
@@ -54,13 +72,70 @@ class ButtonRegistrationListener implements ActionListener{
         JFrame frame = new JFrame();
         frame.setSize(1000,600);
         frame.setLayout(null);
-        setBackground(Color.RED);
+//        JDatePickerImpl datePicker;
+//        setBackground(Color.RED);
+
+        String[] daysBox = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"};
+        String[] monthBox = {"январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"};
+//        String[] YearBox = new String[100];
+//        int j=0;
+//        for(int i=1920;i<2022;i++){
+//            YearBox[j]=Integer.toString(i);
+//            j++;
+////            System.out.print(i);
+//        }
 
 
-        JLabel l4 = new JLabel("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        l4.setSize(200,40);
-        l4.setLocation(500, 300);
-        frame.add(l4);
+
+
+        JButton back= new JButton("Назад");
+        JButton signUp = new JButton("Зарегистрироваться");
+        JLabel title = new JLabel("Регистрация");
+        JLabel name = new JLabel("ФИО: ");
+        JLabel phone = new JLabel("Контактный телефон: ");
+        JLabel birthday = new JLabel("Дата вашего рождения: ");
+        JLabel loginLabel = new JLabel("login: ");
+        JLabel passwordLabel = new JLabel("password: ");
+
+
+
+        UtilDateModel model = new UtilDateModel();
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+        JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
+        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel,new DateLabelFormatter());
+        datePicker.setLocation(50,400);
+
+        frame.add(datePicker);
+
+//        Jco
+
+//        title.setForeground(Color.GREEN);
+
+
+        title.setSize(200,25);
+        title.setLocation(450, 25);
+        loginLabel.setSize(200,25);
+        loginLabel.setLocation(200, 200);
+        passwordLabel.setSize(200,40);
+        passwordLabel.setLocation(500, 300);
+
+        signUp.setBounds(400,460,160,25);
+        back.setBounds(400,500,160,25);
+
+
+        back.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setVisible(false);
+            }
+        });
+        frame.add(title);
+        frame.add(loginLabel);
+        frame.add(back);
+        frame.add(signUp);
 
 //        b2.setSize(100, 30);
 //        b2.setLocation(500, 100);
@@ -103,5 +178,26 @@ class ButtonRegistrationListener implements ActionListener{
             g.drawImage(background, 0, 0, null);
             setLayout(null);
         }
+    }
+    public class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
+
+        private String datePattern = "yyyy-MM-dd";
+        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+        @Override
+        public Object stringToValue(String text) throws ParseException {
+            return dateFormatter.parseObject(text);
+        }
+
+        @Override
+        public String valueToString(Object value) throws ParseException {
+            if (value != null) {
+                Calendar cal = (Calendar) value;
+                return dateFormatter.format(cal.getTime());
+            }
+
+            return "";
+        }
+
     }
 }
