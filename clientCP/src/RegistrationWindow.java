@@ -10,20 +10,25 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Properties;
+import java.util.Random;
 
 public class RegistrationWindow extends JFrame  {
     public RegistrationWindow(){
-        JFrame frame = new JFrame();
-        frame.setSize(1000,600);
-        frame.setLayout(null);
+//        JFrame frame = new JFrame();
+        this.setSize(1000,600);
+        this.setLayout(null);
         JButton back= new JButton("Назад");
         JButton signUp = new JButton("Зарегистрироваться");
         JLabel title = new JLabel("Регистрация");
         JLabel nameLabel = new JLabel("Ваше ФИО: ");
         JLabel phoneLabel = new JLabel("Контактный телефон: ");
         JLabel birthdayLabel = new JLabel("Дата вашего рождения: ");
-        JLabel loginLabel = new JLabel("login: ");
-        JLabel passwordLabel = new JLabel("password: ");
+        JLabel passportIDLabel = new JLabel("Серия и номер вашего паспорта: ");
+        JLabel loginLabel = new JLabel("ID (login): ");
+        JLabel loginPS = new JLabel("(Ваш ID сгенерирован автоматически и является Вашим логином для входа) ");
+
+        JLabel passwordLabel = new JLabel("Придумайте пароль: ");
+        JLabel passwordCheckL = new JLabel("Повторите пароль: ");
 
         JTextField nameTextField =new JTextField();
         JFormattedTextField phoneTextField = null;
@@ -34,6 +39,28 @@ public class RegistrationWindow extends JFrame  {
         }catch (ParseException parseException){
             parseException.printStackTrace();
         }
+
+        JFormattedTextField passportIDTextField = null;
+        try {
+            passportIDTextField = new JFormattedTextField(
+                    new MaskFormatter("UU#######"));
+            passportIDTextField.setColumns(9);
+        }catch (ParseException parseException){
+            parseException.printStackTrace();
+        }
+
+
+        Random random = new Random();
+        String loginID =String.valueOf(random.nextInt(100000)+1);
+        JLabel loginL = new JLabel(loginID);
+
+//        JFormattedTextField passwordTextField = new JFormattedTextField();
+//        passwordTextField.setColumns(8);
+
+        JPasswordField passwordTextField = new JPasswordField(8);
+        JPasswordField passwordCheckText = new JPasswordField(8);
+
+
 
 
 
@@ -79,10 +106,28 @@ public class RegistrationWindow extends JFrame  {
         phoneTextField.setSize(200,25);
         phoneTextField.setLocation(280,90);
 
-//        loginLabel.setSize(200,25);
-//        loginLabel.setLocation(200, 200);
-//        passwordLabel.setSize(200,40);
-//        passwordLabel.setLocation(500, 300);
+        passportIDLabel.setSize(200,25);
+        passportIDLabel.setLocation(30,120);
+        passportIDTextField.setSize(200,25);
+        passportIDTextField.setLocation(280,120);
+
+        loginLabel.setSize(200,25);
+        loginLabel.setLocation(30, 150);
+        loginL.setSize(200,25);
+        loginL.setLocation(280, 150);
+
+        loginPS.setSize(500,25);
+        loginPS.setLocation(30,180);
+
+        passwordLabel.setSize(200,25);
+        passwordLabel.setLocation(30, 210);
+        passwordTextField.setSize(200,25);
+        passwordTextField.setLocation(280, 210);
+
+        passwordCheckL.setSize(200,25);
+        passwordCheckL.setLocation(30, 240);
+        passwordCheckText.setSize(200,25);
+        passwordCheckText.setLocation(280, 240);
 
         signUp.setBounds(400,460,160,25);
         back.setBounds(400,500,160,25);
@@ -92,19 +137,27 @@ public class RegistrationWindow extends JFrame  {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                frame.setVisible(false);
+                setVisible(false);
             }
         });
-        frame.add(title);
-        frame.add(loginLabel);
-        frame.add(back);
-        frame.add(signUp);
-        frame.add(nameLabel);
-        frame.add(nameTextField);
-        frame.add(birthdayLabel);
-        frame.add(datePicker);
-        frame.add(phoneLabel);
-        frame.add(phoneTextField);
+        this.add(title);
+        this.add(back);
+        this.add(signUp);
+        this.add(nameLabel);
+        this.add(nameTextField);
+        this.add(birthdayLabel);
+        this.add(datePicker);
+        this.add(phoneLabel);
+        this.add(phoneTextField);
+        add(passportIDLabel);
+        add(passportIDTextField);
+        this.add(loginLabel);
+        add(loginPS);
+        add(loginL);
+        add(passwordLabel);
+        add(passwordTextField);
+        add(passwordCheckL);
+        add(passwordCheckText);
 
 
 
@@ -112,9 +165,9 @@ public class RegistrationWindow extends JFrame  {
 //        b2.setLocation(500, 100);
 //        frame.add(b2);
 
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
 //        frame.setContentPane(new BackgroundRegistration());
     }
 
