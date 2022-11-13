@@ -29,6 +29,7 @@ public class RegistrationWindow extends JFrame  {
 
         JLabel passwordLabel = new JLabel("Придумайте пароль: ");
         JLabel passwordCheckL = new JLabel("Повторите пароль: ");
+        Validation validation = new Validation();
 
         JTextField nameTextField =new JTextField();
         JFormattedTextField phoneTextField = null;
@@ -161,6 +162,10 @@ public class RegistrationWindow extends JFrame  {
 
 
 
+
+        signUp.addActionListener(new RegistrationActionListener());
+
+
 //        b2.setSize(100, 30);
 //        b2.setLocation(500, 100);
 //        frame.add(b2);
@@ -192,5 +197,22 @@ public class RegistrationWindow extends JFrame  {
         }
 
     }
+
+    public class RegistrationActionListener implements ActionListener{
+        public void actionPerformed(ActionEvent e) {
+            String name;
+            String passwordID;
+            String phone;
+            String birthDay;
+            String login;
+            String password;
+
+
+
+
+        }
+
+
+        }
 
 }
