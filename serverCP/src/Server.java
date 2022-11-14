@@ -1,6 +1,8 @@
 import java.io.*;//импорт пакета, содержащего классы для
 //ввода/вывода
 import java.net.*;//импорт пакета, содержащего классы для работы в
+import java.sql.Connection;
+import java.sql.SQLException;
 //сети Internet
 
 
@@ -9,8 +11,19 @@ public class Server {
 
 
 
-    public static void main(String[] arg)
-    {//объявление объекта класса ServerSocket
+
+
+
+
+    public static void main(String[] arg) throws SQLException {//объявление объекта класса ServerSocket
+
+
+        Database database = new Database();
+        Connection connection=database.databaseConnection();
+
+
+
+
         ServerSocket serverSocket = null;
         Socket clientAccepted     = null;//объявление объекта класса Socket
         ObjectInputStream  sois   = null;//объявление байтового потока ввода
