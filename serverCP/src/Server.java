@@ -3,6 +3,7 @@ import java.io.*;//импорт пакета, содержащего класс�
 import java.net.*;//импорт пакета, содержащего классы для работы в
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 //сети Internet
 
 
@@ -20,6 +21,15 @@ public class Server {
 
         Database database = new Database();
         Connection connection=database.databaseConnection();
+        Statement statement=database.createTable(connection);
+//        int rows = statement.executeUpdate("INSERT libraryUser(login,password) VALUES ('ХУЙ','HIU')");
+//        System.out.printf("Added %d rows", rows);
+//        int rows = statement.executeUpdate("INSERT libraryReader(login,password,nameReader,surname,patronymic,passwordID,phone,birthDay) VALUES ('log','pass','Александра','Житкова','Евгеньевна','MC2902460','+375445119087','2002-10-16')");
+//        System.out.printf("Added %d rows", rows);
+//        String temp = "мяу";
+//        database.addUserToTable(connection,temp,temp);
+
+
 
 
 

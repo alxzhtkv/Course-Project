@@ -71,6 +71,7 @@ public class StartWindow extends JFrame {
 class ButtonRegistrationListener implements ActionListener{
     public void actionPerformed(ActionEvent e){
         new RegistrationWindow().setVisible(true);
+
 //        JFrame frame = new JFrame();
 //        frame.setSize(1000,600);
 //        frame.setLayout(null);

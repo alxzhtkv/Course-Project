@@ -25,4 +25,74 @@ public class Database {
         }
         return connection;
     }
+
+    public Statement addUserToTable(Connection conn,String log, String pass) throws SQLException{
+        try {
+
+            String SQL = "INSERT libraryUser(login,password) VALUES ('log', 'pass')";
+            statement = conn.createStatement();
+            statement.executeUpdate(SQL);
+
+        }catch (Exception e){
+            System.out.println("Error "+e.getMessage());
+            if(statement!=null){
+                statement.close();
+            }
+        }
+
+        return statement;
+    }
+
+
+    public Statement createTable(Connection conn) throws SQLException {
+        try {
+            String SQL ="CREATE TABLE IF NOT EXISTS LibraryUser"
+                    +"(id INTEGER PRIMARY KEY AUTO_INCREMENT,"
+                    +"login INTEGER NOT NULL UNIQUE,"
+                    + "password VARCHAR (30) NOT NULL UNIQUE)";
+            statement = conn.createStatement();
+            statement.executeUpdate(SQL);
+
+            SQL ="CREATE TABLE IF NOT EXISTS LibraryReader"
+                    + "(id INTEGER PRIMARY KEY AUTO_INCREMENT,"
+                    + "login INTEGER,"
+                    + "password VARCHAR (30),"
+                    + "nameReader VARCHAR (30),"
+                    + "surname VARCHAR (30),"
+                    + "patronymic VARCHAR (30),"
+//                    + "passwordID VARCHAR (30),"
+                    + "phone VARCHAR (30),"
+                    + "birthDay DATE,"
+//                    + "IDIDID INTEGER,"
+//                    + "CONSTRAINT FK_login FOREIGN KEY (login)" +
+//                    "REFERENCES LibraryUser(login))";
+//                    + "FOREIGN KEY(password) REFERENCES LibraryUser(password),"
+                    + "FOREIGN KEY(login) REFERENCES LibraryUser(login))";
+
+
+            statement = conn.createStatement();
+            statement.executeUpdate(SQL);
+
+
+
+        }catch (Exception e){
+            System.out.println("Error "+e.getMessage());
+            if(statement!=null){
+                statement.close();
+            }
+        }
+
+
+        return statement;
+    }
+
+    public void dropTable(Connection conn) throws SQLException {
+        try{
+            String SQL="DROP TABLE LibraryUser";
+            statement= conn.createStatement();
+            statement.executeUpdate(SQL);
+        }catch (Exception e){
+            System.out.println("Error "+e.getMessage());
+        }
+    }
 }

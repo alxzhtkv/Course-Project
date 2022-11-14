@@ -7,6 +7,11 @@ public class User {
         this.password = password;
     }
 
+    public User() {
+        this.login = null;
+        this.password = null;
+    }
+
     public String getLogin() {
         return login;
     }

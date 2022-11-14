@@ -13,8 +13,13 @@ import java.util.Properties;
 import java.util.Random;
 
 public class RegistrationWindow extends JFrame  {
+    JTextField nameTextField;
+
     public RegistrationWindow(){
+        User user= new User();
+
 //        JFrame frame = new JFrame();
+
         this.setSize(1000,600);
         this.setLayout(null);
         JButton back= new JButton("Назад");
@@ -31,7 +36,7 @@ public class RegistrationWindow extends JFrame  {
         JLabel passwordCheckL = new JLabel("Повторите пароль: ");
         Validation validation = new Validation();
 
-        JTextField nameTextField =new JTextField();
+        nameTextField =new JTextField();
         JFormattedTextField phoneTextField = null;
         try {
             phoneTextField = new JFormattedTextField(
@@ -141,6 +146,7 @@ public class RegistrationWindow extends JFrame  {
                 setVisible(false);
             }
         });
+
         this.add(title);
         this.add(back);
         this.add(signUp);
@@ -206,6 +212,9 @@ public class RegistrationWindow extends JFrame  {
             String birthDay;
             String login;
             String password;
+            name = nameTextField.getText();
+
+
 
 
 
