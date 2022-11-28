@@ -34,8 +34,11 @@ public class StartWindow extends JFrame {
     static JLabel l1,l2;
 
     JButton startButton,b1,b2;
+    ObjectOutputStream coos;
 
     public StartWindow() {
+
+
 
         setTitle("Library");
         setLayout(null);

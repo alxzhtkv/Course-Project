@@ -6,17 +6,21 @@ import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Properties;
 import java.util.Random;
 
 public class RegistrationWindow extends JFrame  {
-    JTextField nameTextField;
+    JTextField nameTextField,passportIDTextField,birthdayTextField,passwordTextField,passwordCheckText,phoneTextField;
+    JLabel loginL;
 
-    public RegistrationWindow(){
-        User user= new User();
+
+    public RegistrationWindow() {
 
 //        JFrame frame = new JFrame();
 
@@ -36,8 +40,8 @@ public class RegistrationWindow extends JFrame  {
         JLabel passwordCheckL = new JLabel("Повторите пароль: ");
         Validation validation = new Validation();
 
-        nameTextField =new JTextField();
-        JFormattedTextField phoneTextField = null;
+         nameTextField =new JTextField();
+         phoneTextField = null;
         try {
             phoneTextField = new JFormattedTextField(
                     new MaskFormatter("+375-##-###-##-##"));
@@ -46,7 +50,7 @@ public class RegistrationWindow extends JFrame  {
             parseException.printStackTrace();
         }
 
-        JFormattedTextField passportIDTextField = null;
+         passportIDTextField = null;
         try {
             passportIDTextField = new JFormattedTextField(
                     new MaskFormatter("UU#######"));
@@ -58,45 +62,42 @@ public class RegistrationWindow extends JFrame  {
 
         Random random = new Random();
         String loginID =String.valueOf(random.nextInt(100000)+1);
-        JLabel loginL = new JLabel(loginID);
+        loginL = new JLabel(loginID);
 
 //        JFormattedTextField passwordTextField = new JFormattedTextField();
 //        passwordTextField.setColumns(8);
 
-        JPasswordField passwordTextField = new JPasswordField(8);
-        JPasswordField passwordCheckText = new JPasswordField(8);
+         passwordTextField = new JPasswordField(8);
+         passwordCheckText = new JPasswordField(8);
+
+
+        birthdayTextField = null;
+        try {
+            birthdayTextField = new JFormattedTextField(
+                    new MaskFormatter("##/##/####"));
+            birthdayTextField.setColumns(8);
+        }catch (ParseException parseException){
+            parseException.printStackTrace();
+        }
+
+
+
+
+//        ************Datepicker************
+//        UtilDateModel model = new UtilDateModel();
+//        Properties p = new Properties();
+//        p.put("text.today", "Today");
+//
+//        p.put("text.month", "Month");
+//        p.put("text.year", "Year");
+//        JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
+//        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel,new DateLabelFormatter());
+//        ************Datepicker************
 
 
 
 
 
-
-
-        UtilDateModel model = new UtilDateModel();
-        Properties p = new Properties();
-        p.put("text.today", "Today");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
-        JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
-        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel,new RegistrationWindow.DateLabelFormatter());
-
-//        datePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-
-//        JFormattedTextField textField = datePicker.getJFormattedTextField();
-//        System.out.println(textField.getValue());
-
-//        textField.setFormatterFactory(new );
-//        datePicker.getJFormattedTextField()
-
-
-//        Jco
-
-//        title.setForeground(Color.GREEN);
-
-
-//        title.setSize(200,25);
-//        title.setLocation(450, 25);
         nameLabel.setSize(200,25);
         nameLabel.setLocation(30, 20);
         nameTextField.setSize(200,25);
@@ -104,8 +105,8 @@ public class RegistrationWindow extends JFrame  {
 
         birthdayLabel.setSize(200,25);
         birthdayLabel.setLocation(30,50);
-        datePicker.setSize(200,25);
-        datePicker.setLocation(280,50);
+        birthdayTextField.setSize(200,25);
+        birthdayTextField.setLocation(280,50);
 
         phoneLabel.setSize(200,25);
         phoneLabel.setLocation(30,90);
@@ -153,7 +154,7 @@ public class RegistrationWindow extends JFrame  {
         this.add(nameLabel);
         this.add(nameTextField);
         this.add(birthdayLabel);
-        this.add(datePicker);
+        this.add(birthdayTextField);
         this.add(phoneLabel);
         this.add(phoneTextField);
         add(passportIDLabel);
@@ -206,15 +207,34 @@ public class RegistrationWindow extends JFrame  {
 
     public class RegistrationActionListener implements ActionListener{
         public void actionPerformed(ActionEvent e) {
-            String name;
-            String passwordID;
-            String phone;
+
+            String fioname;
             String birthDay;
+            String phone;
+            String passportID;
             String login;
             String password;
-            name = nameTextField.getText();
+
+            fioname = nameTextField.getText();
+            birthDay=birthdayTextField.getText();
+            phone=phoneTextField.getText();
+            passportID=passportIDTextField.getText();
+            login= loginL.getText();
+            password=passwordTextField.getText();
+            String[] fio = fioname.split(" ");
+            String name= fio[1];
+            String surname= fio[0];
+            String patronymic= fio[2];
 
 
+
+
+
+//            System.out.println(name + "\n"+birthDay +"\n"+phone + "\n"+passportID + "\n"+login +  "\n"+password);
+
+            User user = new User(login,password);
+            Reader reader = new Reader(login,password,name,surname,patronymic,passportID,phone,birthDay);
+            System.out.println( reader.getLogin()+"\n"+reader.getPassword()+"n"+reader.getName() + "\n"+reader.getSurname()  + "\n"+reader.getPatronymic() + "\n"+reader.getPassportID()+"\n"+reader.getPhone()+"\n"+reader.getBirthDay());
 
 
 

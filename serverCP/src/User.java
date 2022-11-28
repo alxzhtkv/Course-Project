@@ -1,5 +1,5 @@
 public class User {
-   protected String login;
+    protected String login;
     protected String password;
 
     public User(String login, String password) {
@@ -28,9 +28,9 @@ public class User {
         this.password = password;
     }
 
-   public void sendData(){
+    public void sendData(){
 
-   }
+    }
 
 
 }

@@ -8,6 +8,10 @@ import java.sql.Statement;
 
 
 public class Server {
+    static ServerSocket serverSocket = null;
+    static Socket clientAccepted     = null;//объявление объекта класса Socket
+    static ObjectInputStream  sois   = null;//объявление байтового потока ввода
+    static ObjectOutputStream soos   = null;
 
 
 
@@ -34,10 +38,7 @@ public class Server {
 
 
 
-        ServerSocket serverSocket = null;
-        Socket clientAccepted     = null;//объявление объекта класса Socket
-        ObjectInputStream  sois   = null;//объявление байтового потока ввода
-        ObjectOutputStream soos   = null;//объявление байтового потока вывода
+       //объявление байтового потока вывода
         while (true){
 
             try {
@@ -51,18 +52,22 @@ public class Server {
                 soos = new ObjectOutputStream(clientAccepted.getOutputStream());//создание потока
 //вывода
 
-                String clientMessageRecieved = (String) sois.readObject();//объявление //строки и присваивание ей данных потока ввода, представленных
-//в виде строки (передано клиентом)
+//                String login = (String) sois.readObject();//объявление //строки и присваивание ей данных потока ввода, представленных
+////в виде строки (передано клиентом)
+//                String pass = (String) sois.readObject();
 
-                System.out.println("message recieved: " + clientMessageRecieved);
+//                System.out.println("message recieved: " + login + "\n"+ pass);
+////
+////
+//
+//
+//
+//
+//                String serverMessage = "mur";
+//                soos.writeObject(serverMessage);
 
-
-
-
-
-
-                String serverMessage = "mur";
-                soos.writeObject(serverMessage);
+//                String clientMessageRecieved1 = (String) sois.readObject();
+//                System.out.println("message recieved1: " + clientMessageRecieved1);
 
 
 
@@ -88,6 +93,22 @@ public class Server {
 
 
         }
+
+    }
+
+
+    public void getUser(){
+        try {
+            String login = (String) sois.readObject();
+            String pass = (String) sois.readObject();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
 
     }
 }
