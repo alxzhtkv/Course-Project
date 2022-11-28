@@ -16,10 +16,11 @@ public class Client {
         Scanner in = new Scanner(System.in);
 
         ClientService clientService = new ClientService();
-//        clientService.getConnection();
-        new StartWindow().setVisible(true);
-        User user = new User("1","1");
-        clientService.sendUser(user);
+        clientService.getConnection();
+        new StartWindow(clientService).setVisible(true);
+
+//        User user = new User("1","1");
+//        clientService.sendUser(user);
 
 //        clientService.endConnection();
 //

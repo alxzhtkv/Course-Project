@@ -16,11 +16,14 @@ import java.util.Properties;
 import java.util.Random;
 
 public class RegistrationWindow extends JFrame  {
+    ClientService clientService;
     JTextField nameTextField,passportIDTextField,birthdayTextField,passwordTextField,passwordCheckText,phoneTextField;
     JLabel loginL;
 
 
-    public RegistrationWindow() {
+
+    public RegistrationWindow( ClientService clientService) {
+        this.clientService=clientService;
 
 //        JFrame frame = new JFrame();
 
@@ -235,6 +238,7 @@ public class RegistrationWindow extends JFrame  {
             User user = new User(login,password);
             Reader reader = new Reader(login,password,name,surname,patronymic,passportID,phone,birthDay);
             System.out.println( reader.getLogin()+"\n"+reader.getPassword()+"n"+reader.getName() + "\n"+reader.getSurname()  + "\n"+reader.getPatronymic() + "\n"+reader.getPassportID()+"\n"+reader.getPhone()+"\n"+reader.getBirthDay());
+            clientService.sendUser(user);
 
 
 

@@ -30,13 +30,16 @@ import javax.swing.text.MaskFormatter;
 
 
 public class StartWindow extends JFrame {
+    ClientService clientService;
     private static Image background;
     static JLabel l1,l2;
 
     JButton startButton,b1,b2;
     ObjectOutputStream coos;
 
-    public StartWindow() {
+    public StartWindow( ClientService clientService) {
+        this.clientService=clientService;
+
 
 
 
@@ -73,7 +76,7 @@ public class StartWindow extends JFrame {
 
 class ButtonRegistrationListener implements ActionListener{
     public void actionPerformed(ActionEvent e){
-        new RegistrationWindow().setVisible(true);
+        new RegistrationWindow(clientService).setVisible(true);
 
 //        JFrame frame = new JFrame();
 //        frame.setSize(1000,600);

@@ -9,11 +9,17 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class ClientService {
+//    User user;
     ObjectOutputStream coos=null;
     ObjectInputStream cois=null;
     Socket clientSocket=null;
 
     public  ClientService(){
+
+
+    }
+
+    public void getConnection(){
         try {
             System.out.println("server connecting....");
             clientSocket = new Socket("127.0.0.1",2525);//установление //соединения между локальной машиной и указанным портом узла сети
@@ -26,8 +32,8 @@ public class ClientService {
 
         }catch(Exception e)	{
             e.printStackTrace();//выполнение метода исключения е
+            endConnection();
         }
-
     }
 
     public void endConnection(){

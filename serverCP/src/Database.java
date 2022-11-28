@@ -26,6 +26,7 @@ public class Database {
         return connection;
     }
 
+
     public Statement addUserToTable(Connection conn,String log, String pass) throws SQLException{
         try {
 
@@ -95,4 +96,21 @@ public class Database {
             System.out.println("Error "+e.getMessage());
         }
     }
+
+    public void insertUser(User user,Connection conn){
+        String SQL = "INSERT INTO LibraryUser(login,password) "
+                + "VALUES(?,?)";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL,
+                    Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, user.getLogin());
+            pstmt.setString(2, user.getPassword());
+            int affectedRows = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }

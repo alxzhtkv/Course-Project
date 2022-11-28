@@ -20,6 +20,7 @@ public class Server {
 
 
 
+
     public static void main(String[] arg) throws SQLException {//объявление объекта класса ServerSocket
 
 
@@ -51,6 +52,11 @@ public class Server {
 
                 soos = new ObjectOutputStream(clientAccepted.getOutputStream());//создание потока
 //вывода
+                User user = getUser();
+                database.insertUser(user,connection);
+
+//                int rows = statement.executeUpdate("INSERT libraryUser(login,password) VALUES ('ХУЙ','HIU')");
+
 
 //                String login = (String) sois.readObject();//объявление //строки и присваивание ей данных потока ввода, представленных
 ////в виде строки (передано клиентом)
@@ -97,15 +103,21 @@ public class Server {
     }
 
 
-    public void getUser(){
+    public static User getUser(){
+        String login,pass;
         try {
-            String login = (String) sois.readObject();
-            String pass = (String) sois.readObject();
+            login = (String) sois.readObject();
+            pass = (String) sois.readObject();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+        System.out.println("message recieved: " + login + "\n"+ pass);
+        User usertemp=new User(login,pass);
+        return usertemp;
+
+
 
 
 
