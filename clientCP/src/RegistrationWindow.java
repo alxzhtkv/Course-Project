@@ -26,10 +26,19 @@ public class RegistrationWindow extends JFrame  {
     public RegistrationWindow( ClientService clientService) {
         this.clientService=clientService;
 
+        String mess= "registration";
+        try {
+            clientService.coos.writeObject(mess);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
 //        JFrame frame = new JFrame();
 
         this.setSize(1000,600);
         this.setLayout(null);
+        setTitle("Регистрация");
         back= new JButton("Назад");
         signUp = new JButton("Зарегистрироваться");
         JLabel title = new JLabel("Регистрация");

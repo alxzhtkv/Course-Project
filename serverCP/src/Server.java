@@ -21,12 +21,15 @@ public class Server {
 
 
 
+
     public static void main(String[] arg) throws SQLException {//объявление объекта класса ServerSocket
 
 
+        boolean exit=true;
         Database database = new Database();
         Connection connection=database.databaseConnection();
         Statement statement=database.createTable(connection);
+
 
 //        int rows = statement.executeUpdate("INSERT libraryUser(login,password) VALUES ('ХУЙ','HIU')");
 //        System.out.printf("Added %d rows", rows);
@@ -39,9 +42,9 @@ public class Server {
 
 
 
-
+        User user;
        //объявление байтового потока вывода
-        while (true){
+
 
             try {
                 System.out.println("server starting....");
@@ -53,11 +56,38 @@ public class Server {
 
                 soos = new ObjectOutputStream(clientAccepted.getOutputStream());//создание потока
 //вывода
-                User user = getUser();
-                database.insertUser(user,connection);
-                Reader reader = getReader();
-                System.out.println(reader.getName());
-                database.insertReader(reader,connection);
+
+                while (exit){
+//                    String choice =(String)sois.readObject();
+
+                    switch ((String)sois.readObject()){
+                        case "registration":
+                        {
+                            System.out.println("регистрация");
+//                            user = getUser();
+//                            database.insertUser(user,connection);
+//                            Reader reader = getReader();
+//                            System.out.println(reader.getName());
+//                            database.insertReader(reader,connection);
+
+
+                            break;
+                        }
+                        case "authorization":
+                        {
+                            System.out.println("хуй, но рабочего характера автризации");
+                            user = getUser();
+                            user.getLogin();
+                            System.out.println(database.authorizationCheck(user,connection));
+
+                            break;
+                        }
+                    }
+
+
+
+                }
+
 
 //                int rows = statement.executeUpdate("INSERT libraryUser(login,password) VALUES ('ХУЙ','HIU')");
 
@@ -102,7 +132,6 @@ public class Server {
             }
 
 
-        }
 
     }
 
@@ -117,7 +146,7 @@ public class Server {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("message recieved: " + login + "\n"+ pass);
+
         User usertemp=new User(login,pass);
         return usertemp;
 
@@ -140,7 +169,7 @@ public class Server {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("message recieved (reader)");
+
         Reader readertemp =new Reader(login,password,name,surname,patronymic,passport,phone,birthday);
 
         return readertemp;

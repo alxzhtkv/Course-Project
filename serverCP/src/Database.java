@@ -132,5 +132,33 @@ public class Database {
 
     }
 
+    public Boolean authorizationCheck(User user,Connection conn){
+        boolean flag=false;
+//        String SQL="SELEST * FROM LibraryUser";
+        try {
+            ResultSet resultSet=statement.executeQuery("SELECT * FROM `LibraryUser` WHERE (login ="+user.getLogin() + ");" );
+            if (resultSet.next()){
+                flag=true;
+                System.out.println("ты милашка!");
+//                int login=resultSet.getInt(2);
+//                String password=resultSet.getString(3);
+//                if( && password.equals(user.getPassword())){
+//                    flag=true;
+//                    System.out.println("ты классная и умная, у тебя всё работает!!!");
+//                }
+//                else{
+//                    flag=false;
+//                    System.out.println("ты всё ещё классная и умная, но у тебя всё не работает!!!");
+//
+//                }
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return flag;
+    }
+
 
 }
