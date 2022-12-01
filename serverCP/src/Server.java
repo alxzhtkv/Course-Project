@@ -27,6 +27,7 @@ public class Server {
         Database database = new Database();
         Connection connection=database.databaseConnection();
         Statement statement=database.createTable(connection);
+
 //        int rows = statement.executeUpdate("INSERT libraryUser(login,password) VALUES ('ХУЙ','HIU')");
 //        System.out.printf("Added %d rows", rows);
 //        int rows = statement.executeUpdate("INSERT libraryReader(login,password,nameReader,surname,patronymic,passwordID,phone,birthDay) VALUES ('log','pass','Александра','Житкова','Евгеньевна','MC2902460','+375445119087','2002-10-16')");
@@ -54,6 +55,9 @@ public class Server {
 //вывода
                 User user = getUser();
                 database.insertUser(user,connection);
+                Reader reader = getReader();
+                System.out.println(reader.getName());
+                database.insertReader(reader,connection);
 
 //                int rows = statement.executeUpdate("INSERT libraryUser(login,password) VALUES ('ХУЙ','HIU')");
 
@@ -117,10 +121,29 @@ public class Server {
         User usertemp=new User(login,pass);
         return usertemp;
 
+    }
 
+    public static Reader getReader(){
+        String login,passport,password,name,surname,patronymic,phone,birthday;
+        try {
+            login = (String) sois.readObject();
+            password= (String) sois.readObject();
+            passport = (String) sois.readObject();
+            name = (String) sois.readObject();
+            surname = (String) sois.readObject();
+            patronymic = (String) sois.readObject();
+            phone = (String) sois.readObject();
+            birthday = (String) sois.readObject();
 
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("message recieved (reader)");
+        Reader readertemp =new Reader(login,password,name,surname,patronymic,passport,phone,birthday);
 
-
+        return readertemp;
 
     }
 }

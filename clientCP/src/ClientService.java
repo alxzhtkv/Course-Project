@@ -59,4 +59,21 @@ public class ClientService {
 
     }
 
+    public void sendReader(Reader reader){
+        try {
+            coos.writeObject(reader.getLogin());
+            coos.writeObject(reader.getPassword());
+            coos.writeObject(reader.getPassportID());
+            coos.writeObject(reader.getName());
+            coos.writeObject(reader.getSurname());
+            coos.writeObject(reader.getPatronymic());
+            coos.writeObject(reader.getPhone());
+            coos.writeObject(reader.getBirthDay());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }

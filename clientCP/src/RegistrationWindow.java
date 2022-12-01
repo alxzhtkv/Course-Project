@@ -18,7 +18,8 @@ import java.util.Random;
 public class RegistrationWindow extends JFrame  {
     ClientService clientService;
     JTextField nameTextField,passportIDTextField,birthdayTextField,passwordTextField,passwordCheckText,phoneTextField;
-    JLabel loginL;
+    JLabel loginL,error;
+    JButton back,signUp;
 
 
 
@@ -29,8 +30,8 @@ public class RegistrationWindow extends JFrame  {
 
         this.setSize(1000,600);
         this.setLayout(null);
-        JButton back= new JButton("Назад");
-        JButton signUp = new JButton("Зарегистрироваться");
+        back= new JButton("Назад");
+        signUp = new JButton("Зарегистрироваться");
         JLabel title = new JLabel("Регистрация");
         JLabel nameLabel = new JLabel("Ваше ФИО: ");
         JLabel phoneLabel = new JLabel("Контактный телефон: ");
@@ -42,6 +43,11 @@ public class RegistrationWindow extends JFrame  {
         JLabel passwordLabel = new JLabel("Придумайте пароль: ");
         JLabel passwordCheckL = new JLabel("Повторите пароль: ");
         Validation validation = new Validation();
+
+        error = new JLabel("Неверный ввод пароля, повторите попытку");
+        error.setSize(200,25);
+        error.setLocation(400,400);
+        add(error).setVisible(false);
 
          nameTextField =new JTextField();
          phoneTextField = null;
@@ -211,12 +217,14 @@ public class RegistrationWindow extends JFrame  {
     public class RegistrationActionListener implements ActionListener{
         public void actionPerformed(ActionEvent e) {
 
+
             String fioname;
             String birthDay;
             String phone;
             String passportID;
             String login;
             String password;
+            String passwordCheck;
 
             fioname = nameTextField.getText();
             birthDay=birthdayTextField.getText();
@@ -224,10 +232,35 @@ public class RegistrationWindow extends JFrame  {
             passportID=passportIDTextField.getText();
             login= loginL.getText();
             password=passwordTextField.getText();
+            passwordCheck=passwordCheckText.getText();
+//            System.out.println(password);
+//            System.out.println(passwordCheck);
+
             String[] fio = fioname.split(" ");
             String name= fio[1];
             String surname= fio[0];
             String patronymic= fio[2];
+            Validation validation = new Validation();
+            if(validation.passwordValidation(password,passwordCheck)){
+//                error.setVisible(false);
+                User user = new User(login,password);
+                Reader reader = new Reader(login,password,name,surname,patronymic,passportID,phone,birthDay);
+                System.out.println( reader.getLogin()+"\n"+reader.getPassword()+"n"+reader.getName() + "\n"+reader.getSurname()  + "\n"+reader.getPatronymic() + "\n"+reader.getPassportID()+"\n"+reader.getPhone()+"\n"+reader.getBirthDay());
+                clientService.sendUser(user);
+                clientService.sendReader(reader);
+                error.setText("Регистрация успешно завершена!");
+                error.setVisible(true);
+                signUp.setVisible(false);
+
+
+
+            }
+            else {
+                System.out.println(validation.passwordValidation(password,passwordCheck));
+
+                error.setVisible(true);
+
+            }
 
 
 
@@ -235,10 +268,7 @@ public class RegistrationWindow extends JFrame  {
 
 //            System.out.println(name + "\n"+birthDay +"\n"+phone + "\n"+passportID + "\n"+login +  "\n"+password);
 
-            User user = new User(login,password);
-            Reader reader = new Reader(login,password,name,surname,patronymic,passportID,phone,birthDay);
-            System.out.println( reader.getLogin()+"\n"+reader.getPassword()+"n"+reader.getName() + "\n"+reader.getSurname()  + "\n"+reader.getPatronymic() + "\n"+reader.getPassportID()+"\n"+reader.getPhone()+"\n"+reader.getBirthDay());
-            clientService.sendUser(user);
+
 
 
 

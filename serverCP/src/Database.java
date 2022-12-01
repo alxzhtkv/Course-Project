@@ -55,20 +55,18 @@ public class Database {
             statement.executeUpdate(SQL);
 
             SQL ="CREATE TABLE IF NOT EXISTS LibraryReader"
+//                    + "(id INTEGER PRIMARY KEY AUTO_INCREMENT,"
+////                    + "login INTEGER,"
                     + "(id INTEGER PRIMARY KEY AUTO_INCREMENT,"
                     + "login INTEGER,"
-                    + "password VARCHAR (30),"
+                    + "passportID VARCHAR (30),"
                     + "nameReader VARCHAR (30),"
                     + "surname VARCHAR (30),"
                     + "patronymic VARCHAR (30),"
 //                    + "passwordID VARCHAR (30),"
                     + "phone VARCHAR (30),"
-                    + "birthDay DATE,"
-//                    + "IDIDID INTEGER,"
-//                    + "CONSTRAINT FK_login FOREIGN KEY (login)" +
-//                    "REFERENCES LibraryUser(login))";
-//                    + "FOREIGN KEY(password) REFERENCES LibraryUser(password),"
-                    + "FOREIGN KEY(login) REFERENCES LibraryUser(login))";
+                    + "birthDay VARCHAR (30),"
+                    + "FOREIGN KEY(id) REFERENCES LibraryUser(id))";
 
 
             statement = conn.createStatement();
@@ -112,5 +110,27 @@ public class Database {
         }
 
     }
+
+    public void insertReader(Reader reader,Connection conn){
+        String SQL = "INSERT INTO LibraryReader(login,passportID,nameReader,surname,patronymic,phone,birthDay) "
+                + "VALUES(?,?,?,?,?,?,?)";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL,
+                    Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, reader.getLogin());
+            pstmt.setString(2, reader.getPassportID());
+            pstmt.setString(3, reader.getName());
+            pstmt.setString(4, reader.getSurname());
+            pstmt.setString(5, reader.getPatronymic());
+            pstmt.setString(6, reader.getPhone());
+            pstmt.setString(7, reader.getBirthDay());
+            int affectedRows = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 
 }

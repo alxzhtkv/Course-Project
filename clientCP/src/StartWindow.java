@@ -33,11 +33,12 @@ public class StartWindow extends JFrame {
     ClientService clientService;
     private static Image background;
     static JLabel l1,l2;
+    Container content;
 
     JButton startButton,b1,b2;
     ObjectOutputStream coos;
 
-    public StartWindow( ClientService clientService) {
+    public StartWindow(ClientService clientService) {
         this.clientService=clientService;
 
 
@@ -53,7 +54,7 @@ public class StartWindow extends JFrame {
 
 
         setContentPane(new Background()); // панель
-        Container content = getContentPane(); //теперь
+        content = getContentPane(); //теперь
 
         l1 = new JLabel("Хуй");
         l1.setSize(200,40);
@@ -67,9 +68,9 @@ public class StartWindow extends JFrame {
         b1.addActionListener(new ButtonRegistrationListener());
 //        b2.addActionListener(new ButtonAuthorizationListener());
 
-        add(l1);
-        add(b1);
-        add(b2);
+        content.add(l1);
+        content.add(b1);
+        content.add(b2);
 
 
     }
