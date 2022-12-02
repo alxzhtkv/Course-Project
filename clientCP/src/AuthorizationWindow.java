@@ -10,6 +10,9 @@ public class AuthorizationWindow extends JFrame {
     JLabel error, loginL, passwordL;
     JButton back,signIn;
     Container content;
+    String message;
+
+    JCheckBox checkBoxAdmin;
 
     public AuthorizationWindow(ClientService clientService) throws HeadlessException {
         this.clientService = clientService;
@@ -38,6 +41,7 @@ public class AuthorizationWindow extends JFrame {
 
         loginTextField = new JTextField();
         passwordTextField = new JTextField();
+        checkBoxAdmin = new JCheckBox("Администатор");
 
         loginL.setSize(200,25);
         loginL.setLocation(300,200);
@@ -52,6 +56,8 @@ public class AuthorizationWindow extends JFrame {
 
         signIn.setBounds(400,460,160,25);
         back.setBounds(400,500,160,25);
+        checkBoxAdmin.setBounds(10,500,200,25);
+
 
         error.setSize(200,25);
         error.setLocation(400,400);
@@ -64,6 +70,7 @@ public class AuthorizationWindow extends JFrame {
         content.add(passwordTextField);
         content.add(signIn);
         content.add(back);
+        content.add(checkBoxAdmin);
 
         signIn.addActionListener(new signInActionListener());
 
@@ -83,6 +90,24 @@ public class AuthorizationWindow extends JFrame {
              password=passwordTextField.getText();
              User user = new User(login,password);
              clientService.sendUser(user);
+             if(checkBoxAdmin.isSelected()){
+                 message="admin";
+                 try {
+                     clientService.coos.writeObject(message);
+                 } catch (IOException ex) {
+                     throw new RuntimeException(ex);
+                 }
+             }
+             else {
+                 message="user";
+                 try {
+                     clientService.coos.writeObject(message);
+                 } catch (IOException ex) {
+                     throw new RuntimeException(ex);
+                 }
+             }
+
+
              try {
                  serverAnswer = (String) clientService.cois.readObject();
              } catch (IOException ex) {
@@ -96,6 +121,13 @@ public class AuthorizationWindow extends JFrame {
                      error.setText("Авторизация успешно завершена!");
                      error.setVisible(true);
                      new ReaderWindow(clientService).setVisible(true);
+
+                     break;
+                 }
+                 case "approvedAdmin":{
+                     error.setText("Авторизация админа завершена!");
+                     error.setVisible(true);
+                     new AdminWindow(clientService).setVisible(true);
 
                      break;
                  }

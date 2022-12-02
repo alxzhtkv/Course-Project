@@ -54,6 +54,13 @@ public class Database {
             statement = conn.createStatement();
             statement.executeUpdate(SQL);
 
+           SQL ="CREATE TABLE IF NOT EXISTS LibraryAdmin"
+                    +"(id INTEGER PRIMARY KEY AUTO_INCREMENT,"
+                    +"login INTEGER NOT NULL UNIQUE,"
+                    + "password VARCHAR (30) NOT NULL UNIQUE)";
+            statement = conn.createStatement();
+            statement.executeUpdate(SQL);
+
             SQL ="CREATE TABLE IF NOT EXISTS LibraryReader"
 //                    + "(id INTEGER PRIMARY KEY AUTO_INCREMENT,"
 ////                    + "login INTEGER,"
@@ -111,6 +118,22 @@ public class Database {
 
     }
 
+    public void insertAdmin(User user,Connection conn){
+        String SQL = "INSERT INTO LibraryAdmin(login,password) "
+                + "VALUES(?,?)";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL,
+                    Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, user.getLogin());
+            pstmt.setString(2, user.getPassword());
+            int affectedRows = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     public void insertReader(Reader reader,Connection conn){
         String SQL = "INSERT INTO LibraryReader(login,passportID,nameReader,surname,patronymic,phone,birthDay) "
                 + "VALUES(?,?,?,?,?,?,?)";
@@ -136,9 +159,32 @@ public class Database {
         boolean flag=false;
 
         try {
-            ResultSet resultSet=statement.executeQuery("SELECT * FROM `LibraryUser` WHERE (login ="+user.getLogin()+")" +"AND password ="+ user.getPassword() );
+            ResultSet resultSet=statement.executeQuery("SELECT * FROM `LibraryUser` WHERE (login ="+user.getLogin()+")" );
+//            +"AND (password ="+ user.getPassword().toString() + ")"
             if (resultSet.next()){
-                flag=true;
+                String g=resultSet.getString(3);
+                if(g.equals(user.getPassword()))
+                    flag=true;
+                System.out.println("ты милашка!");
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return flag;
+    }
+
+    public Boolean authorizationAdminCheck(User user,Connection conn){
+        boolean flag=false;
+
+        try {
+            ResultSet resultSet=statement.executeQuery("SELECT * FROM `LibraryAdmin` WHERE (login ="+user.getLogin()+")" );
+//            +"AND (password ="+ user.getPassword().toString() + ")"
+            if (resultSet.next()){
+                String g=resultSet.getString(3);
+                if(g.equals(user.getPassword()))
+                    flag=true;
                 System.out.println("ты милашка!");
             }
 

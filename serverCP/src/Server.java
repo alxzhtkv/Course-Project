@@ -27,6 +27,7 @@ public class Server {
 
         boolean exit=true;
         String serverMessage;
+        String answer;
         Database database = new Database();
         Connection connection=database.databaseConnection();
         Statement statement=database.createTable(connection);
@@ -43,8 +44,9 @@ public class Server {
 
 
 
+
         User user;
-       //объявление байтового потока вывода
+
 
 
             try {
@@ -76,13 +78,26 @@ public class Server {
                         }
                         case "authorization":
                         {
-                            System.out.println("хуй, но рабочего характера автризации");
                             user = getUser();
+                            answer = (String) sois.readObject();
+                            System.out.println("хуй, но рабочего характера автризации");
+
+
                             user.getLogin();
-                            if(database.authorizationCheck(user,connection)){
-                                serverMessage="approved";
-                            }else serverMessage="refused";
-                            soos.writeObject(serverMessage);
+
+                            if(answer.equals("admin")){
+                                if(database.authorizationAdminCheck(user,connection)){
+                                    serverMessage="approvedAdmin";
+                                }else serverMessage="refused";
+                                soos.writeObject(serverMessage);
+                            }
+                            else {
+                                if(database.authorizationCheck(user,connection)){
+                                    serverMessage="approved";
+                                }else serverMessage="refused";
+                                soos.writeObject(serverMessage);
+                            }
+
 
                             break;
                         }

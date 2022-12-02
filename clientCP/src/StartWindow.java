@@ -61,6 +61,7 @@ public class StartWindow extends JFrame {
 class ButtonRegistrationListener implements ActionListener{
     public void actionPerformed(ActionEvent e){
         new RegistrationWindow(clientService).setVisible(true);
+        setVisible(false);
 
     }
 }
