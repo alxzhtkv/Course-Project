@@ -9,6 +9,7 @@ public class AuthorizationWindow extends JFrame {
     JTextField passwordTextField,loginTextField;
     JLabel error, loginL, passwordL;
     JButton back,signIn;
+    Container content;
 
     public AuthorizationWindow(ClientService clientService) throws HeadlessException {
         this.clientService = clientService;
@@ -25,12 +26,15 @@ public class AuthorizationWindow extends JFrame {
 
         setLocationRelativeTo(null);
         setResizable(false);
+        content = getContentPane();
 
         setTitle("Вход");
         back= new JButton("Назад");
         signIn = new JButton("Войти");
+
         loginL=new JLabel("Введите ваш логин: ");
         passwordL=new JLabel("Введите ваш пароль: ");
+        error=new JLabel();
 
         loginTextField = new JTextField();
         passwordTextField = new JTextField();
@@ -49,13 +53,17 @@ public class AuthorizationWindow extends JFrame {
         signIn.setBounds(400,460,160,25);
         back.setBounds(400,500,160,25);
 
+        error.setSize(200,25);
+        error.setLocation(400,400);
 
-        add(loginL);
-        add(passwordL);
-        add(loginTextField);
-        add(passwordTextField);
-        add(signIn);
-        add(back);
+
+        content.add(loginL);
+        content.add(passwordL);
+        content.add(error).setVisible(false);
+        content.add(loginTextField);
+        content.add(passwordTextField);
+        content.add(signIn);
+        content.add(back);
 
         signIn.addActionListener(new signInActionListener());
 
@@ -67,11 +75,37 @@ public class AuthorizationWindow extends JFrame {
          public void actionPerformed(ActionEvent e) {
              String login;
              String password;
+             String serverAnswer;
+
+
 
              login=loginTextField.getText();
              password=passwordTextField.getText();
              User user = new User(login,password);
              clientService.sendUser(user);
+             try {
+                 serverAnswer = (String) clientService.cois.readObject();
+             } catch (IOException ex) {
+                 throw new RuntimeException(ex);
+             } catch (ClassNotFoundException ex) {
+                 throw new RuntimeException(ex);
+             }
+             System.out.println(serverAnswer);
+             switch (serverAnswer){
+                 case "approved":{
+                     error.setText("Авторизация успешно завершена!");
+                     error.setVisible(true);
+                     new ReaderWindow(clientService).setVisible(true);
+
+                     break;
+                 }
+                 case "refused":{
+                     error.setText("Неверный логин или пароль");
+                     error.setVisible(true);
+                     break;
+                 }
+
+             }
          }
 
      }

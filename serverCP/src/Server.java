@@ -26,6 +26,7 @@ public class Server {
 
 
         boolean exit=true;
+        String serverMessage;
         Database database = new Database();
         Connection connection=database.databaseConnection();
         Statement statement=database.createTable(connection);
@@ -78,7 +79,10 @@ public class Server {
                             System.out.println("хуй, но рабочего характера автризации");
                             user = getUser();
                             user.getLogin();
-                            System.out.println(database.authorizationCheck(user,connection));
+                            if(database.authorizationCheck(user,connection)){
+                                serverMessage="approved";
+                            }else serverMessage="refused";
+                            soos.writeObject(serverMessage);
 
                             break;
                         }

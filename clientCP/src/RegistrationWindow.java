@@ -23,6 +23,7 @@ public class RegistrationWindow extends JFrame  {
 
 
 
+
     public RegistrationWindow( ClientService clientService) {
         this.clientService=clientService;
 
