@@ -46,6 +46,7 @@ public class Server {
 
 
         User user;
+        Book book;
 
 
 
@@ -98,6 +99,14 @@ public class Server {
                                 soos.writeObject(serverMessage);
                             }
 
+
+                            break;
+                        }
+
+                        case "addingBook":{
+                            book=getBook();
+                            database.insertBook(book,connection);
+                            System.out.println( book.getAuthor());
 
                             break;
                         }
@@ -192,6 +201,30 @@ public class Server {
         Reader readertemp =new Reader(login,password,name,surname,patronymic,passport,phone,birthday);
 
         return readertemp;
+
+    }
+
+    public static Book getBook(){
+        String id,title,publisher,genre,year,count,author;
+        try {
+            id = (String) sois.readObject();
+            title= (String) sois.readObject();
+            publisher = (String) sois.readObject();
+            genre = (String) sois.readObject();
+            year = (String) sois.readObject();
+            count = (String) sois.readObject();
+            author = (String) sois.readObject();
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+//
+        Book booktemp=new Book(id,title,publisher,genre,year,count,author);
+        return booktemp;
 
     }
 }

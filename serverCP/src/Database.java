@@ -135,6 +135,29 @@ public class Database {
 
     }
 
+    public void insertBook(Book book,Connection conn){
+        String SQL = "INSERT INTO LibraryBooks(IDbook,title,author,publisher,genre,yearBook, countBooks) "
+                + "VALUES(?,?,?,?,?,?,?)";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL,
+                    Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, book.getID());
+            pstmt.setString(2, book.getTitle());
+            pstmt.setString(3, book.getAuthor());
+            pstmt.setString(4, book.getPublisher());
+            pstmt.setString(5, book.getGenre());
+            pstmt.setString(6, book.getYear());
+            pstmt.setString(7, book.getCount());
+
+
+            int affectedRows = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     public void insertAdmin(User user,Connection conn){
         String SQL = "INSERT INTO LibraryAdmin(login,password) "
                 + "VALUES(?,?)";

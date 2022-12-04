@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Random;
 
 public class AddingBooksWindow extends JFrame {
@@ -107,6 +108,14 @@ public class AddingBooksWindow extends JFrame {
 
     public class addBookActionListener implements ActionListener{
         public void actionPerformed(ActionEvent e) {
+
+
+            String mess= "addingBook";
+            try {
+                clientService.coos.writeObject(mess);
+            } catch (IOException ee) {
+                throw new RuntimeException(ee);
+            }
             String ID;
             String title;
             String publisher;
@@ -125,6 +134,7 @@ public class AddingBooksWindow extends JFrame {
             author=authorTextField.getText();
 
             Book book=new Book(id,title,publisher,genre,year,count,author);
+            clientService.sendBook(book);
 
 
 
