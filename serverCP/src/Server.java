@@ -67,11 +67,11 @@ public class Server {
                         case "registration":
                         {
                             System.out.println("регистрация");
-//                            user = getUser();
-//                            database.insertUser(user,connection);
-//                            Reader reader = getReader();
-//                            System.out.println(reader.getName());
-//                            database.insertReader(reader,connection);
+                            user = getUser();
+                            database.insertUser(user,connection);
+                            Reader reader = getReader();
+                            System.out.println(reader.getName());
+                            database.insertReader(reader,connection);
 
 
                             break;

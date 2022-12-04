@@ -79,6 +79,23 @@ public class Database {
             statement = conn.createStatement();
             statement.executeUpdate(SQL);
 
+            SQL ="CREATE TABLE IF NOT EXISTS LibraryBooks"
+//                    + "(id INTEGER PRIMARY KEY AUTO_INCREMENT,"
+////                    + "login INTEGER,"
+                    + "(id INTEGER PRIMARY KEY AUTO_INCREMENT,"
+                    + "IDbook INTEGER,"
+                    + "title VARCHAR (30),"
+                    + "author VARCHAR (30),"
+                    + "publisher VARCHAR (30),"
+                    + "genre VARCHAR (30),"
+//                    + "passwordID VARCHAR (30),"
+                    + "yearBook INTEGER,"
+                    + "countBooks INTEGER)";
+
+
+            statement = conn.createStatement();
+            statement.executeUpdate(SQL);
+
 
 
         }catch (Exception e){

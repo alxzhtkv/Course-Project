@@ -59,6 +59,23 @@ public class ClientService {
 
     }
 
+    public void sendBook(Book book){
+        try {
+            coos.writeObject(book.getID());
+            coos.writeObject(book.getTitle());
+            coos.writeObject(book.getPublisher());
+            coos.writeObject(book.getGenre());
+            coos.writeObject(book.getYear());
+            coos.writeObject(book.getCount());
+            coos.writeObject(book.getAuthor());
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     public void sendReader(Reader reader){
         try {
             coos.writeObject(reader.getLogin());

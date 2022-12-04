@@ -3,11 +3,11 @@ public class Publication {
     String title;
     String publisher;
     String genre;
-    int year;
-    int count;
+    String year;
+    String count;
 
 
-    public Publication(String ID, String title, String publisher, String genre, int year, int count) {
+    public Publication(String ID, String title, String publisher, String genre, String year, String count) {
         this.ID = ID;
         this.title = title;
         this.publisher = publisher;
@@ -40,11 +40,11 @@ public class Publication {
         this.genre = genre;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
@@ -56,11 +56,11 @@ public class Publication {
         this.ID = ID;
     }
 
-    public int getCount() {
+    public String getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(String count) {
         this.count = count;
     }
 }
