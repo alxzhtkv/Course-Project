@@ -98,7 +98,8 @@ public class AddingBooksWindow extends JFrame {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                content.setVisible(false);
+
+                setVisible(false);
             }
         });
 
@@ -135,13 +136,6 @@ public class AddingBooksWindow extends JFrame {
 
             Book book=new Book(id,title,publisher,genre,year,count,author);
             clientService.sendBook(book);
-
-
-
-
-
-
-
 
 
         }

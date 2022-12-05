@@ -4,15 +4,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class AdminWindow extends JFrame {
     ClientService clientService;
     JButton workWithBooks, workWithJournals, workWithUsers, workWithOrders, workWithAdmins;
     JLabel adminMenu;
-    JDialog dialog;
-    JDialog dialogShowBooks;
-    JButton addButton, showButton, deleteButton;
+    JScrollPane tableContainer;
+
+    JDialog dialogShowBooks,deleteDialog;
+    JButton addButton, showButton, deleteButton,backTableButton,sortButton,searchButton;
+
+    JButton edit;
+    JTextField editField;
+    Vector<Book> booksVector;
 
 
 //    JLabel
@@ -29,24 +35,19 @@ public class AdminWindow extends JFrame {
         workWithUsers = new JButton("Управление пользователями");
         workWithOrders = new JButton("Управление заказами");
         workWithAdmins = new JButton("Добавление администратора");
-        dialog = new JDialog();
-        dialogShowBooks = new JDialog();
 
-        addButton = new JButton("Добавить книгу");
+
         showButton = new JButton("Просмотреть фонд библиотеки");
-        deleteButton = new JButton("Удалить книги книгу");
+
+        backTableButton = new JButton("Назад");
+        sortButton = new JButton("Сортировать");
+        searchButton = new JButton("Поиск");
+        addButton = new JButton("Добавить");
+        deleteButton = new JButton("Удалить");
 
 
-        String[] columnsHeader = new String[] {"№", "ID", "Название", "Автор", "Издательство", "Жанр", "Год издания", "Количетсво"};
-        DefaultTableModel dtm=new DefaultTableModel(columnsHeader,0);
-        JTable tbl=new JTable(dtm);
-        String[] item={"A","B","C","D","e","f","g","h"};
-        dtm.addRow(item);
-
-
-        JScrollPane tableContainer = new JScrollPane(tbl);
-
-        dialogShowBooks.add(tableContainer,BorderLayout.CENTER);
+        dialogShowBooks = new JDialog();
+        deleteDialog = new JDialog();
 
 
 
@@ -55,9 +56,14 @@ public class AdminWindow extends JFrame {
 
 
 
-        addButton.setBounds(100, 100, 200, 25);
+
+
+
+
+
+
         showButton.setBounds(100, 150, 200, 25);
-        deleteButton.setBounds(100, 200, 200, 25);
+
 
         adminMenu.setBounds(400, 90, 220, 25);
         workWithBooks.setBounds(400, 100, 220, 25);
@@ -66,24 +72,36 @@ public class AdminWindow extends JFrame {
         workWithOrders.setBounds(400, 250, 220, 25);
         workWithAdmins.setBounds(400, 300, 220, 25);
 
-        dialog.setBounds(0, 0, 400, 400);
-        dialog.setLocationRelativeTo(null);
-        dialog.setLayout(null);
+
+
+
+
+        backTableButton.setBounds(150,460,100,25);
+        sortButton.setBounds(300,460,100,25);
+        searchButton.setBounds(450,460,100,25);
+        addButton.setBounds(600, 460, 100, 25);
+        deleteButton.setBounds(750, 460, 100, 25);
 
         dialogShowBooks.setBounds(0, 0, 1000, 600);
         dialogShowBooks.setLocationRelativeTo(null);
+
+        dialogShowBooks.add(backTableButton);
+        dialogShowBooks.add(sortButton);
+        dialogShowBooks.add(searchButton);
+        dialogShowBooks.add(addButton);
+        dialogShowBooks.add(deleteButton);
 //        dialogShowBooks.setLayout(null);
 
 
-        dialogShowBooks.add(tbl);
+
 
 
 //        dialog.setResizable(false);
 
 
-        dialog.add(addButton);
-        dialog.add(showButton);
-        dialog.add(deleteButton);
+//        dialog.add(addButton);
+
+//        dialog.add(deleteButton);
 
         add(workWithBooks);
         add(workWithJournals);
@@ -93,15 +111,13 @@ public class AdminWindow extends JFrame {
 //        add(dialog).setVisible(false);
 
 
-        workWithBooks.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dialog.setVisible(true);
-            }
-        });
+        workWithBooks.addActionListener(new showBookActionListener());
 
         addButton.addActionListener(new addingBookActionListener());
-        showButton.addActionListener(new showBookActionListener());
+        deleteButton.addActionListener(new deleteBookActionListener());
+//        showButton.addActionListener(new showBookActionListener());
+
+
 
 
     }
@@ -116,7 +132,7 @@ public class AdminWindow extends JFrame {
 
     public class showBookActionListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            dialogShowBooks.setVisible(true);
+
             String mess= "showBooks";
             try {
                 clientService.coos.writeObject(mess);
@@ -127,14 +143,55 @@ public class AdminWindow extends JFrame {
                 throw new RuntimeException(ex);
             }
             int size=Integer.valueOf(mess);
-            Vector<Book> booksVector = new Vector<>();
-            while (size!=0){
+            int count=size;
+            int j=0;
+
+
+            booksVector = new Vector<>();
+            ArrayList<Book> booksList=new ArrayList<>();
+            while (count!=0){
+                System.out.println("происходит пробитие");
                 Book book=clientService.getBookFromDatabase();
                 booksVector.add(book);
-                size--;
+                booksList.add(book);
+                booksVector.get(0).getAuthor();
+
+                count--;
             }
             System.out.println(booksVector.size());
 
+
+            String[] columnsHeader = new String[] {"№", "ID", "Название", "Автор", "Издательство", "Жанр", "Год издания", "Количетсво"};
+            DefaultTableModel dtm=new DefaultTableModel(columnsHeader,0);
+            JTable tbl=new JTable(dtm);
+            for(int i=0;i<size;i++){
+                String[] item ={Integer.toString(i+1),booksVector.get(i).getID(),booksVector.get(i).getTitle(),booksVector.get(i).getAuthor(),booksVector.get(i).getPublisher(),booksVector.get(i).getGenre(),booksVector.get(i).getYear(),booksVector.get(i).getCount()};
+                dtm.addRow(item);
+            }
+
+//            }
+
+
+
+            tableContainer = new JScrollPane(tbl);
+
+            dialogShowBooks.add(tableContainer,BorderLayout.CENTER);
+
+
+//            dialogShowBooks.add(tbl);
+            dialogShowBooks.setVisible(true);
+
+        }
+    }
+
+    public class deleteBookActionListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            dialogShowBooks.setBounds(0, 0, 500, 500);
+            dialogShowBooks.setLocationRelativeTo(null);
+            dialogShowBooks.setLayout(null);
+//            tableContainer.get типа получить ячейку для редактирования
+
+            dialogShowBooks.setVisible(true);
 
         }
     }
