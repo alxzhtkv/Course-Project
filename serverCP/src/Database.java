@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.Vector;
 
 public class Database {
     String userName = "root";
@@ -213,6 +214,39 @@ public class Database {
             e.printStackTrace();
         }
         return flag;
+    }
+
+    public Vector<Book> getBooksFromDatabase(){
+        Vector<Book> booksTemp=new Vector<Book>();
+
+        try {
+            ResultSet resultSet=statement.executeQuery("SELECT * FROM `LibraryBooks`" );
+//            +"AND (password ="+ user.getPassword().toString() + ")"
+            while (resultSet.next()){
+                String ID=resultSet.getString(2);
+                String title=resultSet.getString(3);
+                String author = resultSet.getString(4);
+                String publisher=resultSet.getString(5);
+                String genre=resultSet.getString(6);
+                String year=resultSet.getString(7);
+                String count =resultSet.getString(8);
+                Book book = new Book(ID,title,publisher,genre,year,count,author);
+                System.out.println(book.getTitle());
+                booksTemp.add(book);
+
+//                String g=resultSet.getString(3);
+//                if(g.equals(user.getPassword()))
+//                    flag=true;
+//                System.out.println("ты милашка!");
+
+            }
+            System.out.println("Сработало, малышка!!!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return booksTemp;
     }
 
     public Boolean authorizationAdminCheck(User user,Connection conn){

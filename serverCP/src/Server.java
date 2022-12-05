@@ -4,6 +4,7 @@ import java.net.*;//импорт пакета, содержащего класс
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Vector;
 //сети Internet
 
 
@@ -107,6 +108,22 @@ public class Server {
                             book=getBook();
                             database.insertBook(book,connection);
                             System.out.println( book.getAuthor());
+
+                            break;
+                        }
+
+                        case "showBooks":{
+                            Vector<Book> booksVector= database.getBooksFromDatabase();
+                            int size=booksVector.size();
+                            System.out.println(size);
+                            int i=0;
+                            serverMessage=Integer.toString(size);
+                            soos.writeObject(serverMessage);
+
+                            while (i<size){
+                                sendBook(booksVector.get(i));
+                                i++;
+                                                           }
 
                             break;
                         }
@@ -226,5 +243,20 @@ public class Server {
         Book booktemp=new Book(id,title,publisher,genre,year,count,author);
         return booktemp;
 
+    }
+
+    public static void sendBook(Book book){
+        try {
+            soos.writeObject(book.getID());
+            soos.writeObject(book.getTitle());
+            soos.writeObject(book.getPublisher());
+            soos.writeObject(book.getGenre());
+            soos.writeObject(book.getYear());
+            soos.writeObject(book.getCount());
+            soos.writeObject(book.getAuthor());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

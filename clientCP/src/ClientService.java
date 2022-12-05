@@ -93,4 +93,28 @@ public class ClientService {
 
     }
 
+    public Book getBookFromDatabase(){
+        String id,title,publisher,genre,year,count,author;
+        try {
+            id = (String) cois.readObject();
+            title= (String) cois.readObject();
+            publisher = (String) cois.readObject();
+            genre = (String) cois.readObject();
+            year = (String) cois.readObject();
+            count = (String) cois.readObject();
+            author = (String) cois.readObject();
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+//
+        Book book=new Book(id,title,publisher,genre,year,count,author);
+        return book;
+
+    }
+
 }
