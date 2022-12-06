@@ -14,11 +14,12 @@ public class AdminWindow extends JFrame {
     JScrollPane tableContainer;
 
     JDialog dialogShowBooks,deleteDialog;
-    JButton addButton, showButton, deleteButton,backTableButton,sortButton,searchButton;
+    JButton addButton, showButton, deleteButton,backTableButton,sortButton,searchButton,updateTableButton;
 
     JButton edit;
     JTextField editField;
     Vector<Book> booksVector;
+    JTable tblBooks;
 
 
 //    JLabel
@@ -44,6 +45,7 @@ public class AdminWindow extends JFrame {
         searchButton = new JButton("Поиск");
         addButton = new JButton("Добавить");
         deleteButton = new JButton("Удалить");
+        updateTableButton = new JButton("Обновить");
 
 
         dialogShowBooks = new JDialog();
@@ -81,6 +83,7 @@ public class AdminWindow extends JFrame {
         searchButton.setBounds(450,460,100,25);
         addButton.setBounds(600, 460, 100, 25);
         deleteButton.setBounds(750, 460, 100, 25);
+        updateTableButton.setBounds(900,460,100,25);
 
         dialogShowBooks.setBounds(0, 0, 1000, 600);
         dialogShowBooks.setLocationRelativeTo(null);
@@ -90,6 +93,8 @@ public class AdminWindow extends JFrame {
         dialogShowBooks.add(searchButton);
         dialogShowBooks.add(addButton);
         dialogShowBooks.add(deleteButton);
+        dialogShowBooks.add(updateTableButton);
+
 //        dialogShowBooks.setLayout(null);
 
 
@@ -115,6 +120,18 @@ public class AdminWindow extends JFrame {
 
         addButton.addActionListener(new addingBookActionListener());
         deleteButton.addActionListener(new deleteBookActionListener());
+        updateTableButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                dialogShowBooks.remove(tableContainer);
+                repaint();
+//            showBooks();
+//                tableContainer.updateUI();
+
+//                tableContainer.updateUI();
+            }
+        });
 //        showButton.addActionListener(new showBookActionListener());
 
 
@@ -127,55 +144,23 @@ public class AdminWindow extends JFrame {
             new AddingBooksWindow(clientService).setVisible(true);
 
 
+
+
         }
     }
 
     public class showBookActionListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-
-            String mess= "showBooks";
-            try {
-                clientService.coos.writeObject(mess);
-                mess= (String) clientService.cois.readObject();
-            } catch (IOException e1) {
-                throw new RuntimeException(e1);
-            } catch (ClassNotFoundException ex) {
-                throw new RuntimeException(ex);
-            }
-            int size=Integer.valueOf(mess);
-            int count=size;
-            int j=0;
+//            tableContainer.remove();
 
 
-            booksVector = new Vector<>();
-            ArrayList<Book> booksList=new ArrayList<>();
-            while (count!=0){
-                System.out.println("происходит пробитие");
-                Book book=clientService.getBookFromDatabase();
-                booksVector.add(book);
-                booksList.add(book);
-                booksVector.get(0).getAuthor();
-
-                count--;
-            }
-            System.out.println(booksVector.size());
-
-
-            String[] columnsHeader = new String[] {"№", "ID", "Название", "Автор", "Издательство", "Жанр", "Год издания", "Количетсво"};
-            DefaultTableModel dtm=new DefaultTableModel(columnsHeader,0);
-            JTable tbl=new JTable(dtm);
-            for(int i=0;i<size;i++){
-                String[] item ={Integer.toString(i+1),booksVector.get(i).getID(),booksVector.get(i).getTitle(),booksVector.get(i).getAuthor(),booksVector.get(i).getPublisher(),booksVector.get(i).getGenre(),booksVector.get(i).getYear(),booksVector.get(i).getCount()};
-                dtm.addRow(item);
-            }
+            showBooks();
 
 //            }
 
+//           tblBooks = showBooks();
 
 
-            tableContainer = new JScrollPane(tbl);
-
-            dialogShowBooks.add(tableContainer,BorderLayout.CENTER);
 
 
 //            dialogShowBooks.add(tbl);
@@ -195,4 +180,53 @@ public class AdminWindow extends JFrame {
 
         }
     }
+
+    public void showBooks(){
+
+
+        String mess= "showBooks";
+        try {
+            clientService.coos.writeObject(mess);
+            mess= (String) clientService.cois.readObject();
+        } catch (IOException e1) {
+            throw new RuntimeException(e1);
+        } catch (ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+        int size=Integer.valueOf(mess);
+        int count=size;
+        int j=0;
+
+
+        booksVector = new Vector<>();
+
+        while (count!=0){
+            System.out.println("происходит пробитие");
+            Book book=clientService.getBookFromDatabase();
+            booksVector.add(book);
+
+            booksVector.get(0).getAuthor();
+
+            count--;
+        }
+        System.out.println(booksVector.size());
+
+
+        String[] columnsHeader = new String[] {"№", "ID", "Название", "Автор", "Издательство", "Жанр", "Год издания", "Количетсво"};
+        DefaultTableModel dtm=new DefaultTableModel(columnsHeader,0);
+        JTable tbl=new JTable(dtm);
+
+        for(int i=0;i<size;i++){
+            String[] item ={Integer.toString(i+1),booksVector.get(i).getID(),booksVector.get(i).getTitle(),booksVector.get(i).getAuthor(),booksVector.get(i).getPublisher(),booksVector.get(i).getGenre(),booksVector.get(i).getYear(),booksVector.get(i).getCount()};
+            dtm.addRow(item);
+        }
+        tbl.updateUI();
+
+        tableContainer = new JScrollPane(tbl);
+//        tableContainer.updateUI();
+//            tableContainer.updateUI();
+
+        dialogShowBooks.add(tableContainer,BorderLayout.CENTER);
+    }
+
 }
