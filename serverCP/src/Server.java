@@ -32,6 +32,7 @@ public class Server {
         Database database = new Database();
         Connection connection=database.databaseConnection();
         Statement statement=database.createTable(connection);
+//        database.authorsSort();
 
 
 //        int rows = statement.executeUpdate("INSERT libraryUser(login,password) VALUES ('ХУЙ','HIU')");
@@ -135,6 +136,23 @@ public class Server {
                                serverMessage="deleted";
                            }else serverMessage="error";
                             soos.writeObject(serverMessage);
+
+                            break;
+                        }
+                        case "searchBook":{
+                            answer = (String) sois.readObject();
+                            Vector<Book> booksVectorSearch= database.searchBook(answer);
+                            int size=booksVectorSearch.size();
+                            System.out.println(size);
+                            int i=0;
+                            serverMessage=Integer.toString(size);
+                            soos.writeObject(serverMessage);
+
+                            while (i<size){
+                                sendBook(booksVectorSearch.get(i));
+                                i++;
+                            }
+
 
                             break;
                         }

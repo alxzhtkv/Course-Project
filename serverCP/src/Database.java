@@ -296,5 +296,58 @@ public class Database {
         return flag;
     }
 
+    public  Vector<Book> searchBook(String value){
+        Vector<Book> booksTemp=new Vector<Book>();
+        boolean flag=false;
+        try {
+            ResultSet resultSet=statement.executeQuery("SELECT * FROM LibraryBooks" );
+//            +"AND (password ="+ user.getPassword().toString() + ")"
+            if (resultSet.next()){
+                System.out.println("запись есть!");
 
+                while (resultSet.next()){
+                    String ID=resultSet.getString(2);
+                    String title=resultSet.getString(3);
+                    String author = resultSet.getString(4);
+                    String publisher=resultSet.getString(5);
+                    String genre=resultSet.getString(6);
+                    String year=resultSet.getString(7);
+                    String count =resultSet.getString(8);
+                    if(value.equals(ID)==true || value.equals(title)==true  ||value.equals(author)==true  ||value.equals(publisher)==true  ||value.equals(genre) ==true || value.equals(year)==true  || value.equals(year)==true ){
+                        Book book = new Book(ID,title,publisher,genre,year,count,author);
+                        System.out.println(book.getTitle());
+                        booksTemp.add(book);
+                    }
+
+
+
+//                String g=resultSet.getString(3);
+//                if(g.equals(user.getPassword()))
+//                    flag=true;
+//                System.out.println("ты милашка!");
+
+                }
+            }
+
+
+
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return booksTemp;
+    }
+
+//    public void authorsSort(){
+//        String SQL="ALTER TABLE LibraryBooks ORDER BY title";
+//
+//        try {
+//            statement.executeUpdate(SQL);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//    }
 }
