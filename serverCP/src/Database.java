@@ -269,5 +269,32 @@ public class Database {
         return flag;
     }
 
+    public Boolean deleteBookByID(String id){
+        boolean flag=false;
+        try {
+            ResultSet resultSet=statement.executeQuery("SELECT * FROM LibraryBooks WHERE (IDbook ="+ id +")" );
+//            +"AND (password ="+ user.getPassword().toString() + ")"
+            if (resultSet.next()){
+                flag=true;
+                System.out.println("запись есть!");
+            }
+            if(flag){
+                String sql = "DELETE FROM LibraryBooks " +
+                        "WHERE (IDbook ="+id+")";
+                statement.executeUpdate(sql);
+            }
+
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+        return flag;
+    }
+
 
 }

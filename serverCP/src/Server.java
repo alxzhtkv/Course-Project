@@ -127,6 +127,12 @@ public class Server {
 
                             break;
                         }
+                        case "deleteBook":{
+                            answer = (String) sois.readObject();
+                            System.out.println(database.deleteBookByID(answer));;
+                            break;
+                        }
+
                     }
 
 

@@ -49,7 +49,7 @@ public class AddingBooksWindow extends JFrame {
         countTextField=new JFormattedTextField();
 
         Random random = new Random();
-        id=String.valueOf(random.nextInt(100000)+1);
+        id=String.valueOf(random.nextInt(98999)+1);
         ID=new JLabel(id);
 
         IDl.setBounds(30,20,200,25);

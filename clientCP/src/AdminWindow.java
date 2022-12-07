@@ -1,9 +1,11 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -13,11 +15,11 @@ public class AdminWindow extends JFrame {
     JLabel adminMenu;
     JScrollPane tableContainer;
 
-    JDialog dialogShowBooks,deleteDialog;
-    JButton addButton, showButton, deleteButton,backTableButton,sortButton,searchButton,updateTableButton;
+    JDialog dialogShowBooks, deleteDialog, BooksManagerMenu;
+    JButton addButton, showButton, deleteButton, backTableButton, sortButton, searchButton;
 
     JButton edit;
-    JTextField editField;
+    JTextField editField,deleteByIdTextField;
     Vector<Book> booksVector;
     JTable tblBooks;
 
@@ -38,33 +40,19 @@ public class AdminWindow extends JFrame {
         workWithAdmins = new JButton("Добавление администратора");
 
 
-        showButton = new JButton("Просмотреть фонд библиотеки");
-
+        showButton = new JButton("Просмотреть книги");
         backTableButton = new JButton("Назад");
         sortButton = new JButton("Сортировать");
         searchButton = new JButton("Поиск");
         addButton = new JButton("Добавить");
         deleteButton = new JButton("Удалить");
-        updateTableButton = new JButton("Обновить");
 
 
         dialogShowBooks = new JDialog();
         deleteDialog = new JDialog();
+        BooksManagerMenu = new JDialog();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        showButton.setBounds(100, 150, 200, 25);
+        BooksManagerMenu.setLayout(null);
 
 
         adminMenu.setBounds(400, 90, 220, 25);
@@ -75,30 +63,36 @@ public class AdminWindow extends JFrame {
         workWithAdmins.setBounds(400, 300, 220, 25);
 
 
-
-
-
-        backTableButton.setBounds(150,460,100,25);
-        sortButton.setBounds(300,460,100,25);
-        searchButton.setBounds(450,460,100,25);
-        addButton.setBounds(600, 460, 100, 25);
-        deleteButton.setBounds(750, 460, 100, 25);
-        updateTableButton.setBounds(900,460,100,25);
+        showButton.setBounds(100, 100, 200, 25);
+        backTableButton.setBounds(150, 460, 100, 25);
+        sortButton.setBounds(100, 200, 200, 25);
+        searchButton.setBounds(100, 250, 200, 25);
+        addButton.setBounds(100, 150, 200, 25);
+        deleteButton.setBounds(100, 300, 200, 25);
+//        updateTableButton.setBounds(900,460,100,25);
 
         dialogShowBooks.setBounds(0, 0, 1000, 600);
         dialogShowBooks.setLocationRelativeTo(null);
 
-        dialogShowBooks.add(backTableButton);
-        dialogShowBooks.add(sortButton);
-        dialogShowBooks.add(searchButton);
-        dialogShowBooks.add(addButton);
-        dialogShowBooks.add(deleteButton);
-        dialogShowBooks.add(updateTableButton);
+        BooksManagerMenu.setBounds(0, 0, 400, 400);
+        BooksManagerMenu.setLocationRelativeTo(null);
+
+        BooksManagerMenu.add(showButton);
+        BooksManagerMenu.add(addButton);
+
+        BooksManagerMenu.add(sortButton);
+        BooksManagerMenu.add(searchButton);
+        BooksManagerMenu.add(deleteButton);
+
+
+//        dialogShowBooks.add(backTableButton);
+//        dialogShowBooks.add(sortButton);
+//        dialogShowBooks.add(searchButton);
+//        dialogShowBooks.add(addButton);
+//        dialogShowBooks.add(deleteButton);
+//        dialogShowBooks.add(updateTableButton);
 
 //        dialogShowBooks.setLayout(null);
-
-
-
 
 
 //        dialog.setResizable(false);
@@ -116,117 +110,251 @@ public class AdminWindow extends JFrame {
 //        add(dialog).setVisible(false);
 
 
-        workWithBooks.addActionListener(new showBookActionListener());
+        workWithBooks.addActionListener(new BooksManagerActionListener());
 
         addButton.addActionListener(new addingBookActionListener());
         deleteButton.addActionListener(new deleteBookActionListener());
-        updateTableButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        showButton.addActionListener(new ShowBookActionListener());
 
-                dialogShowBooks.remove(tableContainer);
-                repaint();
-//            showBooks();
-//                tableContainer.updateUI();
+    }
 
-//                tableContainer.updateUI();
-            }
-        });
-//        showButton.addActionListener(new showBookActionListener());
-
-
-
-
+    public class BooksManagerActionListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            BooksManagerMenu.setVisible(true);
+        }
     }
 
     public class addingBookActionListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             new AddingBooksWindow(clientService).setVisible(true);
-
-
-
-
         }
     }
 
-    public class showBookActionListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-//            tableContainer.remove();
-
-
-            showBooks();
-
-//            }
-
-//           tblBooks = showBooks();
-
-
-
-
-//            dialogShowBooks.add(tbl);
-            dialogShowBooks.setVisible(true);
-
-        }
-    }
 
     public class deleteBookActionListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            dialogShowBooks.setBounds(0, 0, 500, 500);
-            dialogShowBooks.setLocationRelativeTo(null);
-            dialogShowBooks.setLayout(null);
-//            tableContainer.get типа получить ячейку для редактирования
 
-            dialogShowBooks.setVisible(true);
+            String mess = "deleteBook";
+            try {
+                clientService.coos.writeObject(mess);
+
+            } catch (IOException e1) {
+                throw new RuntimeException(e1);
+            }
+
+            JDialog newDialog = new JDialog();
+            newDialog.setLayout(null);
+
+            JButton delBttn=new JButton("Удалить");
+
+            JLabel IDTextField=new JLabel("Введите ID книги для удаления");
+            newDialog.setBounds(0, 0, 400, 400);
+
+            deleteByIdTextField = null;
+            try {
+                deleteByIdTextField = new JFormattedTextField(
+                        new MaskFormatter("#####"));
+//                deleteByIdTextField.setColumns(5);
+            } catch (ParseException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            IDTextField.setBounds(100,100,200,25);
+            deleteByIdTextField.setBounds(100,150,200,25);
+            delBttn.setBounds(150,300,100,25);
+
+//            IDTextField.setBounds(100,100,100,25);
+//            deleteByIdTextField.setBounds(100,200,50,25);
+//            delBttn.setBounds(100,300,50,25);
+
+            newDialog.add(IDTextField);
+            newDialog.add(deleteByIdTextField);
+            newDialog.add(delBttn);
+
+            newDialog.setLocationRelativeTo(null);
+            newDialog.setVisible(true);
+
+            delBttn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    String id=deleteByIdTextField.getText();
+
+                    try {
+                        clientService.coos.writeObject(id);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+
 
         }
     }
 
-    public void showBooks(){
+    public class ShowBookActionListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
 
 
-        String mess= "showBooks";
-        try {
-            clientService.coos.writeObject(mess);
-            mess= (String) clientService.cois.readObject();
-        } catch (IOException e1) {
-            throw new RuntimeException(e1);
-        } catch (ClassNotFoundException ex) {
-            throw new RuntimeException(ex);
+            String mess = "showBooks";
+            try {
+                clientService.coos.writeObject(mess);
+                mess = (String) clientService.cois.readObject();
+            } catch (IOException e1) {
+                throw new RuntimeException(e1);
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+            int size = Integer.valueOf(mess);
+            int count = size;
+            int j = 0;
+
+
+            Vector<Book> booksVector = new Vector<>();
+
+            while (count != 0) {
+                System.out.println("происходит пробитие");
+                Book book = clientService.getBookFromDatabase();
+                booksVector.add(book);
+
+                booksVector.get(0).getAuthor();
+
+                count--;
+            }
+            System.out.println(booksVector.size());
+
+
+            String[] columnsHeader = new String[]{"№", "ID", "Название", "Автор", "Издательство", "Жанр", "Год издания", "Количетсво"};
+            DefaultTableModel dtm = new DefaultTableModel(columnsHeader, 0);
+            JTable tbl = new JTable(dtm);
+
+            for (int i = 0; i < size; i++) {
+                String[] item = {Integer.toString(i + 1), booksVector.get(i).getID(), booksVector.get(i).getTitle(), booksVector.get(i).getAuthor(), booksVector.get(i).getPublisher(), booksVector.get(i).getGenre(), booksVector.get(i).getYear(), booksVector.get(i).getCount()};
+                dtm.addRow(item);
+            }
+            tbl.updateUI();
+
+            JScrollPane tableContainer = new JScrollPane(tbl);
+            JDialog newDialog = new JDialog();
+            newDialog.setBounds(0, 0, 1000, 600);
+            newDialog.setLocationRelativeTo(null);
+
+            newDialog.add(tableContainer, BorderLayout.CENTER);
+            newDialog.setVisible(true);
+
         }
-        int size=Integer.valueOf(mess);
-        int count=size;
-        int j=0;
 
-
-        booksVector = new Vector<>();
-
-        while (count!=0){
-            System.out.println("происходит пробитие");
-            Book book=clientService.getBookFromDatabase();
-            booksVector.add(book);
-
-            booksVector.get(0).getAuthor();
-
-            count--;
-        }
-        System.out.println(booksVector.size());
-
-
-        String[] columnsHeader = new String[] {"№", "ID", "Название", "Автор", "Издательство", "Жанр", "Год издания", "Количетсво"};
-        DefaultTableModel dtm=new DefaultTableModel(columnsHeader,0);
-        JTable tbl=new JTable(dtm);
-
-        for(int i=0;i<size;i++){
-            String[] item ={Integer.toString(i+1),booksVector.get(i).getID(),booksVector.get(i).getTitle(),booksVector.get(i).getAuthor(),booksVector.get(i).getPublisher(),booksVector.get(i).getGenre(),booksVector.get(i).getYear(),booksVector.get(i).getCount()};
-            dtm.addRow(item);
-        }
-        tbl.updateUI();
-
-        tableContainer = new JScrollPane(tbl);
-//        tableContainer.updateUI();
-//            tableContainer.updateUI();
-
-        dialogShowBooks.add(tableContainer,BorderLayout.CENTER);
     }
-
 }
+
+//    public void showBooks(){
+//
+//
+//        String mess= "showBooks";
+//        try {
+//            clientService.coos.writeObject(mess);
+//            mess= (String) clientService.cois.readObject();
+//        } catch (IOException e1) {
+//            throw new RuntimeException(e1);
+//        } catch (ClassNotFoundException ex) {
+//            throw new RuntimeException(ex);
+//        }
+//        int size=Integer.valueOf(mess);
+//        int count=size;
+//        int j=0;
+//
+//
+//        booksVector = new Vector<>();
+//
+//        while (count!=0){
+//            System.out.println("происходит пробитие");
+//            Book book=clientService.getBookFromDatabase();
+//            booksVector.add(book);
+//
+//            booksVector.get(0).getAuthor();
+//
+//            count--;
+//        }
+//        System.out.println(booksVector.size());
+//
+//
+//        String[] columnsHeader = new String[] {"№", "ID", "Название", "Автор", "Издательство", "Жанр", "Год издания", "Количетсво"};
+//        DefaultTableModel dtm=new DefaultTableModel(columnsHeader,0);
+//        JTable tbl=new JTable(dtm);
+//        tableContainer = new JScrollPane(tbl);
+//
+//        for(int i=0;i<size;i++){
+//            String[] item ={Integer.toString(i+1),booksVector.get(i).getID(),booksVector.get(i).getTitle(),booksVector.get(i).getAuthor(),booksVector.get(i).getPublisher(),booksVector.get(i).getGenre(),booksVector.get(i).getYear(),booksVector.get(i).getCount()};
+//            dtm.addRow(item);
+//        }
+//        tbl.updateUI();
+//
+//
+//        tableContainer.revalidate();
+////        tableContainer.updateUI();
+////            tableContainer.updateUI();
+//
+//        dialogShowBooks.add(tableContainer,BorderLayout.CENTER);
+//    }
+//
+//
+//    public void showBook(){
+//
+//
+//        String mess= "showBooks";
+//        try {
+//            clientService.coos.writeObject(mess);
+//            mess= (String) clientService.cois.readObject();
+//        } catch (IOException e1) {
+//            throw new RuntimeException(e1);
+//        } catch (ClassNotFoundException ex) {
+//            throw new RuntimeException(ex);
+//        }
+//        int size=Integer.valueOf(mess);
+//        int count=size;
+//        int j=0;
+//
+//
+//        Vector <Book>booksVector = new Vector<>();
+//
+//        while (count!=0){
+//            System.out.println("происходит пробитие");
+//            Book book=clientService.getBookFromDatabase();
+//            booksVector.add(book);
+//
+//            booksVector.get(0).getAuthor();
+//
+//            count--;
+//        }
+//        System.out.println(booksVector.size());
+//
+//
+//        String[] columnsHeader = new String[] {"№", "ID", "Название", "Автор", "Издательство", "Жанр", "Год издания", "Количетсво"};
+//        DefaultTableModel dtm=new DefaultTableModel(columnsHeader,0);
+//        JTable tbl=new JTable(dtm);
+//
+//        for(int i=0;i<size;i++){
+//            String[] item ={Integer.toString(i+1),booksVector.get(i).getID(),booksVector.get(i).getTitle(),booksVector.get(i).getAuthor(),booksVector.get(i).getPublisher(),booksVector.get(i).getGenre(),booksVector.get(i).getYear(),booksVector.get(i).getCount()};
+//            dtm.addRow(item);
+//        }
+//        tbl.updateUI();
+//
+//        JScrollPane tableContainer = new JScrollPane(tbl);
+//        JDialog newDialog=new JDialog();
+//        newDialog.setBounds(0, 0, 1000, 600);
+//        newDialog.setLocationRelativeTo(null);
+//
+//        newDialog.add(tableContainer,BorderLayout.CENTER);
+//        newDialog.setVisible(true);
+//
+//
+////        tableContainer.updateUI();
+////            tableContainer.updateUI();
+//
+//
+////        dialogShowBooks.add(tableContainer,BorderLayout.CENTER);
+//    }
+//
+//
+//
+//}
