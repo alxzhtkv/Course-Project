@@ -129,7 +129,13 @@ public class Server {
                         }
                         case "deleteBook":{
                             answer = (String) sois.readObject();
-                            System.out.println(database.deleteBookByID(answer));;
+                            boolean flag=database.deleteBookByID(answer);
+                            System.out.println(flag);
+                           if(flag){
+                               serverMessage="deleted";
+                           }else serverMessage="error";
+                            soos.writeObject(serverMessage);
+
                             break;
                         }
 

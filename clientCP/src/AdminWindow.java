@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 public class AdminWindow extends JFrame {
+    String mess;
     ClientService clientService;
     JButton workWithBooks, workWithJournals, workWithUsers, workWithOrders, workWithAdmins;
     JLabel adminMenu;
@@ -134,7 +135,7 @@ public class AdminWindow extends JFrame {
     public class deleteBookActionListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
-            String mess = "deleteBook";
+            mess = "deleteBook";
             try {
                 clientService.coos.writeObject(mess);
 
@@ -146,9 +147,11 @@ public class AdminWindow extends JFrame {
             newDialog.setLayout(null);
 
             JButton delBttn=new JButton("Удалить");
+            JButton okButtn=new JButton("Ок");
 
             JLabel IDTextField=new JLabel("Введите ID книги для удаления");
             newDialog.setBounds(0, 0, 400, 400);
+            JLabel error = new JLabel();
 
             deleteByIdTextField = null;
             try {
@@ -162,6 +165,9 @@ public class AdminWindow extends JFrame {
             IDTextField.setBounds(100,100,200,25);
             deleteByIdTextField.setBounds(100,150,200,25);
             delBttn.setBounds(150,300,100,25);
+            okButtn.setBounds(150,100,100,25);
+            error.setBounds(150,50,200,25);
+
 
 //            IDTextField.setBounds(100,100,100,25);
 //            deleteByIdTextField.setBounds(100,200,50,25);
@@ -171,20 +177,72 @@ public class AdminWindow extends JFrame {
             newDialog.add(deleteByIdTextField);
             newDialog.add(delBttn);
 
+
             newDialog.setLocationRelativeTo(null);
             newDialog.setVisible(true);
+
+            JDialog errorDialog = new JDialog();
+            errorDialog.setSize( 400, 200);
+            errorDialog.setLayout(null);
+            errorDialog.setVisible(false);
+            errorDialog.setLocationRelativeTo(null);
+
+            errorDialog.setResizable(false);
+
+
+            errorDialog.add(okButtn);
+            errorDialog.add(error);
+            okButtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    errorDialog.setVisible(false);
+                }
+            });
+
 
             delBttn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
+
                     String id=deleteByIdTextField.getText();
+
+
 
                     try {
                         clientService.coos.writeObject(id);
+                        mess=(String) clientService.cois.readObject();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
+                    } catch (ClassNotFoundException ex) {
+                        throw new RuntimeException(ex);
                     }
+                    switch (mess) {
+                        case "deleted": {
+                            error.setText("Запись удалена");
+                            errorDialog.setVisible(true);
+                            newDialog.setVisible(false);
+//                            error.setText("Запись удалена");
+//                            error.setVisible(true);
+
+
+
+                            break;
+                        }
+                        case "error": {
+                            error.setText("Запись не найдена");
+                            errorDialog.setVisible(true);
+                            newDialog.setVisible(false);
+//                            error.setText("Запись не найдена");
+//                            error.setVisible(true);
+
+
+
+                            break;
+                        }
+                    }
+
+
                 }
             });
 
