@@ -149,10 +149,42 @@ public class AdminWindow extends JFrame {
 
             managerMenu.add(UserShowButton);
             managerMenu.setVisible(true);
-            showButton.addActionListener(new ActionListener() {
+            UserShowButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+
+                    JDialog showUserMenu=new JDialog();
+                    showUserMenu.setLayout(null);
+                    showUserMenu.setBounds(0, 0, 400, 300);
+                    showUserMenu.setLocationRelativeTo(null);
+
+                    JButton readersBttn= new JButton("Посмотреть все данные");
+                    JButton usersBttn= new JButton("Посмотреть пароли/логины");
+
+
+                    readersBttn.setBounds(100, 50, 200, 25);
+                    usersBttn.setBounds(100, 100, 200, 25);
+
+
+                    showUserMenu.add(readersBttn);
+                    showUserMenu.add(usersBttn);
+                    showUserMenu.setVisible(true);
+
                     managerMenu.setVisible(false);
+
+                    readersBttn.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            showReadersTable();
+                        }
+                    });
+
+                    usersBttn.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            showUsersTable();
+                        }
+                    });
                 }
             });
 
@@ -504,6 +536,100 @@ public class AdminWindow extends JFrame {
 
 
         }
+    }
+
+    public void showUsersTable(){
+        String mess = "showUsers";
+        try {
+            clientService.coos.writeObject(mess);
+            mess = (String) clientService.cois.readObject();
+        } catch (IOException e1) {
+            throw new RuntimeException(e1);
+        } catch (ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+        int size = Integer.valueOf(mess);
+        int count = size;
+        int j = 0;
+
+        Vector<User> usersVector = new Vector<>();
+
+        while (count != 0) {
+
+            User user = clientService.getUserFromDatabase();
+            usersVector.add(user);
+            count--;
+        }
+        System.out.println(usersVector.size());
+
+
+        String[] columnsHeader = new String[]{"№", "ID(логин)", "Пароль"};
+        DefaultTableModel dtm = new DefaultTableModel(columnsHeader, 0);
+        JTable tbl = new JTable(dtm);
+
+
+        for (int i = 0; i < size; i++) {
+            String[] item = {Integer.toString(i + 1), usersVector.get(i).getLogin(), usersVector.get(i).getPassword()};
+            dtm.addRow(item);
+        }
+        tbl.updateUI();
+
+        JScrollPane tableContainer = new JScrollPane(tbl);
+        JDialog newDialog = new JDialog();
+        newDialog.setBounds(0, 0, 1000, 600);
+        newDialog.setLocationRelativeTo(null);
+
+        newDialog.add(tableContainer, BorderLayout.CENTER);
+        newDialog.setVisible(true);
+
+
+    }
+
+    public void showReadersTable(){
+        String mess = "showReaders";
+        try {
+            clientService.coos.writeObject(mess);
+            mess = (String) clientService.cois.readObject();
+        } catch (IOException e1) {
+            throw new RuntimeException(e1);
+        } catch (ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+        int size = Integer.valueOf(mess);
+        int count = size;
+        int j = 0;
+
+        Vector<Reader> readersVector = new Vector<>();
+
+        while (count != 0) {
+
+            Reader reader = clientService.getReaderFromDatabase();
+            readersVector.add(reader);
+            count--;
+        }
+        System.out.println(readersVector.size());
+
+
+        String[] columnsHeader = new String[]{"№", "ID", "№ паспорта", "Фамилия", "Имя", "Отчество", "Телефон", "Дата рождения"};
+        DefaultTableModel dtm = new DefaultTableModel(columnsHeader, 0);
+        JTable tbl = new JTable(dtm);
+
+
+        for (int i = 0; i < size; i++) {
+            String[] item = {Integer.toString(i + 1), readersVector.get(i).getLogin(), readersVector.get(i).getPassportID(), readersVector.get(i).getSurname(), readersVector.get(i).getName(), readersVector.get(i).getPatronymic(), readersVector.get(i).getPhone(), readersVector.get(i).getBirthDay()};
+            dtm.addRow(item);
+        }
+        tbl.updateUI();
+
+        JScrollPane tableContainer = new JScrollPane(tbl);
+        JDialog newDialog = new JDialog();
+        newDialog.setBounds(0, 0, 1000, 600);
+        newDialog.setLocationRelativeTo(null);
+
+        newDialog.add(tableContainer, BorderLayout.CENTER);
+        newDialog.setVisible(true);
+
+
     }
     public void showBooksTable(){
         String mess = "showBooks";

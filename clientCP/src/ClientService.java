@@ -117,4 +117,48 @@ public class ClientService {
 
     }
 
+    public Reader getReaderFromDatabase(){
+        String login,password,name,surname,patronymic,passportId,phone,birthday;
+        try {
+            login = (String) cois.readObject();
+            password= (String) cois.readObject();
+            name = (String) cois.readObject();
+            surname = (String) cois.readObject();
+            patronymic = (String) cois.readObject();
+            passportId = (String) cois.readObject();
+            phone = (String) cois.readObject();
+            birthday = (String) cois.readObject();
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+//
+        Reader reader= new Reader(login,password,name,surname,patronymic,passportId,phone,birthday);
+        return reader;
+
+    }
+
+    public User getUserFromDatabase(){
+        String login,password;
+        try {
+            login = (String) cois.readObject();
+            password= (String) cois.readObject();
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+//
+        User user= new User(login,password);
+        return user;
+
+    }
+
 }

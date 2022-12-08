@@ -249,6 +249,66 @@ public class Database {
         return booksTemp;
     }
 
+    public Vector<Reader> getReadersFromDatabase(){
+        Vector<Reader> readersTemp=new Vector<Reader>();
+        String password = "1";
+        try {
+            ResultSet resultSet=statement.executeQuery("SELECT * FROM `LibraryReader`" );
+//            +"AND (password ="+ user.getPassword().toString() + ")"
+            while (resultSet.next()){
+                String login=resultSet.getString(2);
+                String passportID=resultSet.getString(3);
+                String nameReader = resultSet.getString(4);
+                String surname=resultSet.getString(5);
+                String patronymic=resultSet.getString(6);
+                String phone=resultSet.getString(7);
+                String birthday =resultSet.getString(8);
+                Reader reader = new Reader(login,password,nameReader,surname,patronymic,passportID,phone, birthday);
+
+
+                readersTemp.add(reader);
+
+//                String g=resultSet.getString(3);
+//                if(g.equals(user.getPassword()))
+//                    flag=true;
+//                System.out.println("ты милашка!");
+
+            }
+            System.out.println("Сработало, малышка!!!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return readersTemp;
+    }
+
+    public Vector<User> getUsersFromDatabase(){
+        Vector<User> usersVectorTemp=new Vector<User>();
+
+        try {
+            ResultSet resultSet=statement.executeQuery("SELECT * FROM `LibraryUser`" );
+
+            while (resultSet.next()){
+                String login=resultSet.getString(2);
+                String password=resultSet.getString(3);
+
+                User user = new User(login,password);
+
+
+                usersVectorTemp.add(user);
+
+
+            }
+            System.out.println("Сработало, малышка!!!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return usersVectorTemp;
+    }
+
     public Boolean authorizationAdminCheck(User user,Connection conn){
         boolean flag=false;
 

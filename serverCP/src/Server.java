@@ -156,6 +156,50 @@ public class Server {
 
                             break;
                         }
+                        case "showReaders":{
+                            Vector<Reader> readersVector= database.getReadersFromDatabase();
+                            int size=readersVector.size();
+                            System.out.println(size);
+                            int i=0;
+                            serverMessage=Integer.toString(size);
+                            soos.writeObject(serverMessage);
+
+                            while (i<size){
+                                sendReader(readersVector.get(i));
+                                i++;
+                            }
+
+                            break;
+
+
+                        }
+
+                        case "showUsers":{
+                            Vector<User> usersVector= database.getUsersFromDatabase();
+                            int size=usersVector.size();
+                            System.out.println(size);
+                            int i=0;
+                            serverMessage=Integer.toString(size);
+                            soos.writeObject(serverMessage);
+
+                            while (i<size){
+                                sendUser(usersVector.get(i));
+                                i++;
+                            }
+
+                            break;
+
+
+                        }
+
+                        case "addAdmin":{
+                            user = getUser();
+                            database.insertAdmin(user,connection);
+
+                            break;
+
+
+                        }
 
                     }
 
@@ -284,6 +328,33 @@ public class Server {
             soos.writeObject(book.getYear());
             soos.writeObject(book.getCount());
             soos.writeObject(book.getAuthor());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void sendReader(Reader reader){
+        try {
+            soos.writeObject(reader.getLogin());
+            soos.writeObject(reader.getPassword());
+            soos.writeObject(reader.getName());
+            soos.writeObject(reader.getSurname());
+            soos.writeObject(reader.getPatronymic());
+            soos.writeObject(reader.getPassportID());
+            soos.writeObject(reader.getPhone());
+            soos.writeObject(reader.getBirthDay());
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void sendUser(User user){
+        try {
+            soos.writeObject(user.getLogin());
+            soos.writeObject(user.getPassword());
 
         } catch (IOException e) {
             throw new RuntimeException(e);
