@@ -2,19 +2,35 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ReaderWindow extends JFrame {
+    JButton showPersonalDataBttn,managerOrderBttn,editPersonalDataBttn,favouritesBttn;
     ClientService clientService;
-    Menu main,books,setting;MenuItem item1;
+//    Menu main,books,setting;MenuItem item1;
     Container content;
-    JLabel hui,fg,a;
+//    JLabel hui,fg,a;
 
     public ReaderWindow(ClientService clientService) throws HeadlessException {
         this.clientService = clientService;
         setTitle("Личный кабинет");
-        setLayout(null);
         setSize(1000, 600);
+        setLayout(null);
         setLocationRelativeTo(null);
         setResizable(false);
-        content = getContentPane();
+//        content = getContentPane();
+        managerOrderBttn = new JButton("Меню заказа");
+        favouritesBttn = new JButton("Избранное");
+        showPersonalDataBttn = new JButton("Данные личного кабинета");
+        editPersonalDataBttn = new JButton("Изменить личные данные");
+
+        managerOrderBttn.setBounds(400, 100, 220, 25);
+        favouritesBttn.setBounds(400, 150, 220, 25);
+        showPersonalDataBttn.setBounds(400, 200, 220, 25);
+        editPersonalDataBttn.setBounds(400, 250, 220, 25);
+
+
+        add(managerOrderBttn);
+        add(favouritesBttn);
+        add(showPersonalDataBttn);
+        add(editPersonalDataBttn);
 
 //        hui= new JLabel("Работаает1");
 //        fg= new JLabel("Работаает2");

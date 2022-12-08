@@ -119,6 +119,7 @@ public class AdminWindow extends JFrame {
 
         workWithBooks.addActionListener(new BooksManagerActionListener());
         workWithUsers.addActionListener(new UserManagerActionListener());
+        workWithAdmins.addActionListener(new AdminsManagerActionListener());
 
         addButton.addActionListener(new addingBookActionListener());
         deleteButton.addActionListener(new deleteBookActionListener());
@@ -126,8 +127,26 @@ public class AdminWindow extends JFrame {
         editButton.addActionListener(new EditBookActionListener());
         searchButton.addActionListener(new SearchEditBookActionListener());
 
+
     }
 
+    public class AdminsManagerActionListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            JButton AdminShowButton = new JButton("Посмотреть администраторов");
+            AdminShowButton.setBounds(100, 50, 200, 25);
+            JButton AdminAddButton = new JButton("Добавить");
+            AdminAddButton.setBounds(100, 100, 200, 25);
+            JButton AdminDeleteButton = new JButton("Удалить");
+            AdminDeleteButton.setBounds(100, 150, 200, 25);
+
+            managerMenu.add(AdminShowButton);
+            managerMenu.add(AdminAddButton);
+            managerMenu.add(AdminDeleteButton);
+
+            managerMenu.setVisible(true);
+
+        }
+    }
     public class BooksManagerActionListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             managerMenu.add(showButton);
